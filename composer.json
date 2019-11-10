@@ -3,7 +3,17 @@
     "description": "EaseApp is a PHP based Micro Framework, that can be helpful in writing both Web Applications and REST APIs in a simple and easier way.",
     "type": "library",
 	"require": {
-        "php": ">=7.0.0",
+        "ext-json": "*",
+        "php": "^7.1",
+		"nyholm/psr7": "^1.2",
+        "kriswallsmith/buzz": "^1.0",
+        "nyholm/psr7-server": "^0.3.0",
+        "zendframework/zend-httphandlerrunner": "^1.1",
+		"vlucas/phpdotenv": "^3.6"
+    },
+	"require-dev": {
+        "ext-json": "*",
+        "php": "^7.1",
 		"nyholm/psr7": "^1.2",
         "kriswallsmith/buzz": "^1.0",
         "nyholm/psr7-server": "^0.3.0",
