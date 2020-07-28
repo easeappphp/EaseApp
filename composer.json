@@ -40,6 +40,7 @@
         "illuminate/container": "^7.21",
 		"relay/relay": "~2.0"
     },
+	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
     "authors": [
         {
