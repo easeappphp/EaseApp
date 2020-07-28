@@ -30,7 +30,7 @@ use Relay\Relay;
 $serviceClassNamesArray = array();
 $middlewareQueueArray = array();
 
-$app = new App(dirname(dirname(__FILE__)));
+$app = new App(dirname(__FILE__));
 $singleConfigFilePath = dirname(__FILE__).'/config/first-config.php';
 
 $appInitResult = $app->init('From-Single-File', 'string', $singleConfigFilePath, $serviceClassNamesArray = array());
