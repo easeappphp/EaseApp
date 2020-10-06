@@ -70,7 +70,7 @@ return [
     | Base Path
     |--------------------------------------------------------------------------
     |
-    | This is the Base Path of the Application. This will be the Same for both Web & Commandline.
+    | This is the Base Path of the Application. This will be the Same for both Web & Commandline. This is the place .env is expected to be placed ingeneral.
     |
     */
 
@@ -87,11 +87,11 @@ return [
 
     'web_root_path' => env('APP_WEB_ROOT_PATH'),
 	
-	'siteroot_basedir' => env('APP_BASE_PATH') . 'public_html',
-	'siteroot_basedir_command_line' => env('APP_BASE_PATH') . 'public_html',
-	'siteroot_basedir_command_line_dev' => env('APP_BASE_PATH') . 'public_html',
-	'site_home_path_full' => env('APP_BASE_PATH'),
-	'site_home_path_full_dev' => env('APP_BASE_PATH'),
+    'siteroot_basedir' => env('APP_BASE_PATH') . 'public_html',
+    'siteroot_basedir_command_line' => env('APP_BASE_PATH') . 'public_html',
+    'siteroot_basedir_command_line_dev' => env('APP_BASE_PATH') . 'public_html',
+    'site_home_path_full' => env('APP_BASE_PATH'),
+    'site_home_path_full_dev' => env('APP_BASE_PATH'),
 	
 	
 	/*
@@ -282,10 +282,17 @@ return [
     |
     */
 
-    'routing_engine_rule_files' => [
+    /* 'routing_engine_rule_files' => [
 		__DIR__.'/routing-engine-app-core-rules.php',
 		__DIR__.'/routing-engine-app-specific-rules1.php',
 		__DIR__.'/routing-engine-app-specific-rules2.php',
+	], */
+	'routing_engine_rule_files' => [
+		__DIR__.'/../routes/web.php',
+		__DIR__.'/../routes/ajax.php',
+		__DIR__.'/../routes/ajax-api-common.php',
+		__DIR__.'/../routes/rest-api.php',
+		__DIR__.'/../routes/soap-api.php',
 	],
 	
 	/*
@@ -324,7 +331,7 @@ return [
 
     'route_rel_template_context' => '',
 	
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Other Config
     |--------------------------------------------------------------------------
@@ -358,7 +365,7 @@ return [
 	'show_page_load_db_query_info' => '1',
 	'check_email_activation_login' => 'yes',
 	
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Third Party Provider Keys Storage Settings
     |--------------------------------------------------------------------------
@@ -384,7 +391,57 @@ return [
 	'vonage_communications_application_name' => env('VONAGE_COMMUNICATIONS_APPLICATION_NAME'),
 	'vonage_communications_application_id' => env('VONAGE_COMMUNICATIONS_APPLICATION_ID'),
 	'vonage_communications_application_rel_private_key_filename' => env('VONAGE_COMMUNICATIONS_APPLICATION_REL_PRIVATE_KEY_FILENAME'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Autoloaded Service Providers
+    |--------------------------------------------------------------------------
+    |
+    | The service providers listed here will be automatically loaded on the
+    | request to your application. Feel free to add your own services to
+    | this array to grant expanded functionality to your applications.
+    |
+    */
+
+    'providers' => [
+
+        /*
+         * EaseApp PHP Framework Service Providers...
+         */
+        
+        /*
+         * Package Service Providers...
+         */
+
+        /*
+         * Application Service Providers...
+         */
+        \EaseAppPHP\Providers\AppServiceProvider::class,
+        \EaseAppPHP\Providers\RouteServiceProvider::class,
+
+    ],
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Route Type Middlware Group Mapping
+    |--------------------------------------------------------------------------
+    |
+    | The Different Route_type and corresponding MiddlwareGroup name mapping.
+    | route_type: ajax | soap-web-service | rest-web-service | ajax-web-service-common | frontend-web-app | backend-web-app | web-app-common
+    */
 	
+    'route_type_middleware_group_mapping' => [
+        
+            'ajax' => 'ajax',
+            'ajax-web-service-common' => 'ajax',
+            'rest-web-service' => 'api',
+            'soap-web-service' => 'api',
+            'frontend-web-app' => 'web',
+            'backend-web-app' => 'web',
+            'web-app-common' => 'web',
+    
+    ],
+    
 	
 ];
 ?>

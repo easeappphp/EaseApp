@@ -1,5 +1,5 @@
 <?php
-namespace EaseAppPHP\Classes;
+namespace EaseAppPHP\Core;
 
 /**
  * EAConfig Class
@@ -127,4 +127,3 @@ class EAConfig
 	}*/
 			
 }
-?>
