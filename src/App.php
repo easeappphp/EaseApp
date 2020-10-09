@@ -252,8 +252,8 @@ Class App extends BaseApplication
                 foreach($this->routesList as $key => $value){
                     if($key ==  $required_matched_page_filename){
                         print_r($value);
-                        $required_route_type = $value["route_type"];
-                        echo "required_route_type: " . $required_route_type . "<br>\n";
+                        $page_route_type = $value["route_type"];
+                        echo "$page_route_type: " . $page_route_type . "<br>\n";
 			$required_controller_type = $value["controller_type"];
                         echo "required_controller_type: " . $required_controller_type . "<br>\n";
                         $required_with_middleware = $value["with_middleware"];
@@ -275,6 +275,86 @@ Class App extends BaseApplication
                     if ($required_controller_type == "procedural") {
 
                             echo "Load Procedural Route Controller<br>\n";
+                            
+                            //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+                            //if (($page_is_ajax == "1") && ($page_is_frontend == "3")) {
+                            if (($page_route_type == "ajax") || ($page_route_type == "soap-web-service") || ($page_route_type == "rest-web-service") || ($page_route_type == "ajax-web-service-common")) {
+
+                                    if ($page_route_type == "ajax") {
+
+                                            //Pure Ajax Call Scenario
+                                            include "ajax-pages/" . "ajax-header.php";
+                                            include "ajax-pages/" . $page_filename;
+
+                                    } elseif ($page_route_type == "soap-web-service") {
+
+                                            //Soap Web Service Endpoint Scenario
+                                            include "soap-apis/" . "web-service-endpoint-header.php";
+                                            include "soap-apis/" . $page_filename;
+
+                                    } elseif ($page_route_type == "rest-web-service") {
+
+                                            //Rest Web Service Endpoint Scenario
+                                            include "rest-apis/" . "web-service-endpoint-header.php";
+                                            include "rest-apis/" . $page_filename;
+
+                                    } else {
+
+                                            //Either Ajax Call or Web Service Endpoint Scenario (Common for BOTH)
+                                            include "ajax-common/" . $page_filename;
+
+                                    }
+
+                            } elseif (($page_route_type == "frontend-web-app") || ($page_route_type == "backend-web-app") || ($page_route_type == "web-app-common")) {
+
+                                    //Web Applications: This does the loading of the Modal Aspect (logic with db interaction) respective resource for regular web application requests. 
+                                    //Values include: (frontend-web-app | backend-web-app | web-app-common). Note: $config["route_rel_template_context"] will have to be defined in model file, for routes with route-type = web-app-common.
+                                    include "../app/core/model.php";
+
+                                    if (($page_route_type == "frontend-web-app") || ($page_route_type == "backend-web-app") || (($page_route_type == "web-app-common") && (($config["route_rel_template_context"] == "frontend") || ($config["route_rel_template_context"] == "backend")))) {
+
+                                            //Web Applications: This does the loading of the View Aspect (Template and Page Content with corresponding Assets) respective resource for regular web application requests
+
+                                            //Include Header
+                                            if (($page_route_type == "frontend-web-app") || (($page_route_type == "web-app-common") && ($config["route_rel_template_context"] == "frontend"))) {
+
+                                                    //frontend related page / template to be loaded
+                                                    include "templates/" . $chosen_frontend_template . "/header-top.php";
+                                                    include "../app/core/additional-config.php";
+                                                    include "templates/" . $chosen_frontend_template . "/header.php"; 
+
+                                            } elseif (($page_route_type == "backend-web-app") || (($page_route_type == "web-app-common") && ($config["route_rel_template_context"] == "backend"))) {
+
+                                                    //admin related pages / template to be loaded
+                                                    include "templates/" . $chosen_template . "/header-top.php";
+                                                    include "../app/core/additional-config.php";
+                                                    include "templates/" . $chosen_template . "/header.php";  
+
+                                            }
+
+                                            include "../app/core/view.php";
+
+                                            //Include Footer
+                                            if (($page_route_type == "frontend-web-app") || (($page_route_type == "web-app-common") && ($config["route_rel_template_context"] == "frontend"))) {
+
+                                                    //frontend related page / template to be loaded
+                                                    include "templates/" . $chosen_frontend_template . "/footer.php";
+
+                                            } elseif (($page_route_type == "backend-web-app") || (($page_route_type == "web-app-common") && ($config["route_rel_template_context"] == "backend"))) {
+
+                                                    //admin related pages / template to be loaded
+                                                    include "templates/" . $chosen_template . "/footer.php";
+
+                                            }
+
+                                    }
+
+                            } else {
+
+                                    //Alert User to Define Correct Route related Template Context
+                                    echo "Invalid Route related Template Context Definition.<br>";
+
+                            }
 
                     } else if ($required_controller_type == "oop-mapped") {
 
