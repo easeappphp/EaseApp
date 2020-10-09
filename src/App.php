@@ -237,7 +237,7 @@ Class App extends BaseApplication
             
                 //Web
                 
-                $this->routeslist = $this->container->get('routes');
+                $this->routesList = $this->container->get('routes');
                 $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
                 
@@ -248,6 +248,26 @@ Class App extends BaseApplication
                 //exit;
                 
                 $required_matched_page_filename = $this->container->get('matchedRouteResponse')["matched_page_filename"];
+                
+                foreach($this->routesList as $key => $value){
+                    if($key ==  $required_matched_page_filename){
+                        print_r($value);
+                        $required_route_type = $value["route_type"];
+                        echo "required_route_type: " . $required_route_type . "<br>\n";
+                        $required_with_middleware = $value["with_middleware"];
+                        echo "required_with_middleware: " . $required_with_middleware . "<br>\n";
+                        $required_without_middleware = $value["without_middleware"];
+                        echo "required_without_middleware: " . $required_without_middleware . "<br>\n";
+                        if($required_with_middleware != ""){
+                            $required_with_middleware_array = explode(",", $required_with_middleware);
+                        }
+                        if($required_without_middleware != ""){
+                            $required_without_middleware_array = explode(",", $required_without_middleware);
+                        }
+                        break;
+                    }
+                }
+
                 if ($required_matched_page_filename != "header-response-only-404-not-found") {
                     //oop_mapped controller or procedural controller
                     
