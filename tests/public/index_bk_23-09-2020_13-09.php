@@ -1,6 +1,6 @@
 <?php 
 declare(strict_types=1);
-//namespace EaseAppPHP\Application;
+namespace EaseAppPHP\Application;
 
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -97,6 +97,7 @@ $envFilePath = dirname(dirname(__FILE__));
 $singleFolderConfigFilePath = dirname(dirname(__FILE__)).'/config';
 
 $application = new App($envFilePath, $container, 'From-Single-Folder', 'string', $singleFolderConfigFilePath);
+//$application = new App($container);
 $container->instance('App', $application);
 
 $app = $container->get('App');

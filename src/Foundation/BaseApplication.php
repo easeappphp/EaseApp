@@ -1,7 +1,6 @@
 <?php
 namespace EaseAppPHP\Foundation;
 
-//class Application extends Container implements ApplicationContract, CachesConfiguration, CachesRoutes, HttpKernelInterface
 class BaseApplication implements \EaseAppPHP\Foundation\Interfaces\ApplicationInterface
 {
     /**
@@ -129,34 +128,6 @@ class BaseApplication implements \EaseAppPHP\Foundation\Interfaces\ApplicationIn
      * @var array
      */
     protected $absoluteCachePathPrefixes = ['/', '\\'];
-
-    /**
-     * Create a new Illuminate application instance.
-     *
-     * @param  string|null  $basePath
-     * @return void
-     */
-    /*public function __construct($basePath = null)
-    {
-        if ($basePath) {
-            $this->setBasePath($basePath);
-        }
-
-       // $this->registerBaseBindings();
-        //$this->registerBaseServiceProviders();
-        //$this->registerCoreContainerAliases();
-    }*/
-    
-    /**
-     * Set the base path for the application.
-     *
-     * @param  string  $basePath
-     * @return $this
-     */
-    /*public function setBasePath($basePath)
-    {
-        
-    }*/
 
     /**
      * Get the version number of the application.

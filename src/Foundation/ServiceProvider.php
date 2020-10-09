@@ -2,7 +2,6 @@
 namespace EaseAppPHP\Foundation;
 
 
-//class Application extends Container implements ApplicationContract, CachesConfiguration, CachesRoutes, HttpKernelInterface
 class ServiceProvider implements \EaseAppPHP\Foundation\Interfaces\ServiceProviderInterface
 {
     
@@ -11,7 +10,7 @@ class ServiceProvider implements \EaseAppPHP\Foundation\Interfaces\ServiceProvid
     /**
      * Create a new Illuminate application instance.
      *
-     * @param  string|null  $basePath
+     * @param  object  $container
      * @return void
      */
     public function __construct($container)
