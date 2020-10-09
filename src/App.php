@@ -254,6 +254,8 @@ Class App extends BaseApplication
                         print_r($value);
                         $required_route_type = $value["route_type"];
                         echo "required_route_type: " . $required_route_type . "<br>\n";
+			$required_controller_type = $value["controller_type"];
+                        echo "required_controller_type: " . $required_controller_type . "<br>\n";
                         $required_with_middleware = $value["with_middleware"];
                         echo "required_with_middleware: " . $required_with_middleware . "<br>\n";
                         $required_without_middleware = $value["without_middleware"];
@@ -270,14 +272,29 @@ Class App extends BaseApplication
 
                 if ($required_matched_page_filename != "header-response-only-404-not-found") {
                     //oop_mapped controller or procedural controller
-                    
+                    if ($required_controller_type == "procedural") {
+
+                            echo "Load Procedural Route Controller<br>\n";
+
+                    } else if ($required_controller_type == "oop-mapped") {
+
+                            echo "Load oop-mapped Route Controller<br>\n";
+
+                    } else {
+
+                            echo "Invalid Controller Type Value<br>\n";
+
+                    }
                 } else {
                     //do automated check for oop controller enumeration
                     
-                    if ("oop" == "success") {
+                    if ("success" == "success") {
                         //oop enumeration success
+			echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route<br>\n";
+						
                     } else {
                         //echo "404 error";
+			echo "404 error<br>\n";
                     }
                 }
 
