@@ -35,6 +35,12 @@ class BaseWebController implements \EaseAppPHP\Foundation\Interfaces\BaseWebCont
     public function callAction($method, $parameters)
     {
         return call_user_func_array([$this, $method], $parameters);
+        /*$handler = array( 'MyClass', 'MyMethod');
+        $params = array(1,2,3,4);
+
+        if (is_callable($handler)) { 
+            call_user_func_array($handler , $params);
+        }*/
     }
 
     /**
