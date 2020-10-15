@@ -256,17 +256,21 @@ Class App extends BaseApplication
                         echo "page_filename: " . $page_filename . "<br>\n";
                         $page_route_type = $value["route_type"];
                         echo "page_route_type: " . $page_route_type . "<br>\n";
-			$required_controller_type = $value["controller_type"];
-                        echo "required_controller_type: " . $required_controller_type . "<br>\n";
-                        $required_with_middleware = $value["with_middleware"];
-                        echo "required_with_middleware: " . $required_with_middleware . "<br>\n";
-                        $required_without_middleware = $value["without_middleware"];
-                        echo "required_without_middleware: " . $required_without_middleware . "<br>\n";
-                        if($required_with_middleware != ""){
-                            $required_with_middleware_array = explode(",", $required_with_middleware);
+			$page_controller_type = $value["controller_type"];
+                        echo "page_controller_type: " . $page_controller_type . "<br>\n";
+                        $page_controller_class_name = $value["controller_class_name"];
+                        echo "page_controller_class_name: " . $page_controller_class_name . "<br>\n";
+                        $page_method_name = $value["method_name"];
+                        echo "page_method_name: " . $page_method_name . "<br>\n";
+                        $page_with_middleware = $value["with_middleware"];
+                        echo "page_with_middleware: " . $page_with_middleware . "<br>\n";
+                        $page_without_middleware = $value["without_middleware"];
+                        echo "page_without_middleware: " . $page_without_middleware . "<br>\n";
+                        if($page_with_middleware != ""){
+                            $page_with_middleware_array = explode(",", $page_with_middleware);
                         }
-                        if($required_without_middleware != ""){
-                            $required_without_middleware_array = explode(",", $required_without_middleware);
+                        if($page_without_middleware != ""){
+                            $page_without_middleware_array = explode(",", $page_without_middleware);
                         }
                         break;
                     }
@@ -274,7 +278,7 @@ Class App extends BaseApplication
 
                 if ($required_matched_page_filename != "header-response-only-404-not-found") {
                     //oop_mapped controller or procedural controller
-                    if ($required_controller_type == "procedural") {
+                    if ($page_controller_type == "procedural") {
 
                         echo "Load Procedural Route Controller<br>\n";
 
@@ -358,7 +362,7 @@ Class App extends BaseApplication
 
                         }
 
-                    } else if ($required_controller_type == "oop-mapped") {
+                    } else if ($page_controller_type == "oop-mapped") {
 
                             echo "Load oop-mapped Route Controller<br>\n";
 
