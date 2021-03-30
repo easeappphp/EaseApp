@@ -241,49 +241,62 @@ Class App extends BaseApplication
                 $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
                 
-                //var_dump($this->routeslist);                
-                //var_dump($this->container->get('matchedRouteResponse'));
-                //echo "<pre>";
-                //print_r($this->middlewarePipeQueueEntries);
-                //exit;
-                
-                $matched_page_filename = $this->container->get('matchedRouteResponse')["matched_page_filename"];
+                //$matchedPageFilename = $this->container->get('matchedRouteResponse')["matched_page_filename"];
+                $matchedPageFilename =  $this->matchedRouteResponse["matched_page_filename"];
                 
                 foreach($this->routesList as $key => $value){
-                    if($key ==  $matched_page_filename){
+                    if($key ==  $matchedPageFilename){
                         //print_r($value);
-                        $page_filename = $value["page_filename"];
-                        echo "page_filename: " . $page_filename . "<br>\n";
-                        $page_route_type = $value["route_type"];
-                        echo "page_route_type: " . $page_route_type . "<br>\n";
-			$page_controller_type = $value["controller_type"];
-                        echo "page_controller_type: " . $page_controller_type . "<br>\n";
-                        $page_controller_class_name = $value["controller_class_name"];
-                        echo "page_controller_class_name: " . $page_controller_class_name . "<br>\n";
-                        $page_method_name = $value["method_name"];
-                        echo "page_method_name: " . $page_method_name . "<br>\n";
-                        $page_with_middleware = $value["with_middleware"];
-                        echo "page_with_middleware: " . $page_with_middleware . "<br>\n";
-                        $page_without_middleware = $value["without_middleware"];
-                        echo "page_without_middleware: " . $page_without_middleware . "<br>\n";
-                        if($page_with_middleware != ""){
-                            $page_with_middleware_array = explode(",", $page_with_middleware);
+                        $pageFilename = $value["page_filename"];
+                        echo "pageFilename: " . $pageFilename . "<br>\n";
+                        $pageRouteType = $value["route_type"];
+                        echo "pageRouteType: " . $pageRouteType . "<br>\n";
+			$pageControllerType = $value["controller_type"];
+                        echo "pageControllerType: " . $pageControllerType . "<br>\n";
+                        $pageControllerClassName = $value["controller_class_name"];
+                        echo "pageControllerClassName: " . $pageControllerClassName . "<br>\n";
+                        $pageMethodName = $value["method_name"];
+                        echo "pageMethodName: " . $pageMethodName . "<br>\n";
+                        $pageWithMiddleware = $value["with_middleware"];
+                        echo "pageWithMiddleware: " . $pageWithMiddleware . "<br>\n";
+                        $pageWithoutMiddleware = $value["without_middleware"];
+                        echo "pageWithoutMiddleware: " . $pageWithoutMiddleware . "<br>\n";
+                        if($pageWithMiddleware != ""){
+                            $pageWithMiddlewareArray = explode(",", $pageWithMiddleware);
                         }
-                        if($page_without_middleware != ""){
-                            $page_without_middleware_array = explode(",", $page_without_middleware);
+                        if($pageWithoutMiddleware != ""){
+                            $pageWithoutMiddlewareArray = explode(",", $pageWithoutMiddleware);
                         }
                         break;
                     }
                 }
 
-                if ((isset($matched_page_filename)) && ($matched_page_filename != "header-response-only-404-not-found")) {
+                if ((isset($matchedPageFilename)) && ($matchedPageFilename != "header-response-only-404-not-found")) {
                     //oop_mapped controller or procedural controller
-                    if ((isset($page_controller_type)) && ($page_controller_type == "procedural")) {
+                    if ((isset($pageControllerType)) && ($pageControllerType == "procedural")) {
 
                         echo "Load Procedural Route Controller<br>\n";
                         
-                        /*$proceduralController = new ProceduralController();
+                        $proceduralController = new $pageControllerClassName();
                         
+                        //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+                        if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
+
+                            $proceduralController->processAjaxApiCall($pageRouteType, $pageFilename);
+
+                        } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
+                            //$config["route_rel_template_context"]
+                            $proceduralController->processWebCall($pageRouteType, $this->getConfig()["first-config"]["route_rel_template_context"], $this->getConfig()["first-config"]["chosen_template"], $this->getConfig()["first-config"]["chosen_frontend_template"], $pageFilename);
+
+                        } else {
+
+                                //Alert User to Define Correct Route related Template Context
+                                echo "Invalid Route related Template Context Definition.<br>";
+
+                        }
+                        
+                        //$proceduralController = new ProceduralController();
+                        /*
                         //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
                         //if (($page_is_ajax == "1") && ($page_is_frontend == "3")) {
                         if (($page_route_type == "ajax") || ($page_route_type == "soap-web-service") || ($page_route_type == "rest-web-service") || ($page_route_type == "ajax-web-service-common")) {
@@ -301,7 +314,7 @@ Class App extends BaseApplication
 
                         }*/
 
-                    } else if ((isset($page_controller_type)) && ($page_controller_type == "oop-mapped")) {
+                    } else if ((isset($pageControllerType)) && ($pageControllerType == "oop-mapped")) {
 
                             echo "Load oop-mapped Route Controller<br>\n";
                             
@@ -316,14 +329,14 @@ Class App extends BaseApplication
                     
                     if ("success" == "success") {
                         //oop enumeration success
-			echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route<br>\n";
+						echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route<br>\n";
 						
                     } else {
                         //echo "404 error";
-			echo "404 error<br>\n";
+						echo "404 error<br>\n";
                     }
                 }
-
+				
                 // RUN MIDDLEWARE using HTTPHandlerRunner Laminas Library
                 //https://docs.laminas.dev/laminas-stratigility/v3/middleware/#middleware
                 $requestHandlerRunnerServer = new \Laminas\HttpHandlerRunner\RequestHandlerRunner(
