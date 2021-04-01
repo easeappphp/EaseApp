@@ -318,6 +318,24 @@ Class App extends BaseApplication
 
                             echo "Load oop-mapped Route Controller<br>\n";
                             
+                            $oopMappedController = new $pageControllerClassName();
+                        
+                            //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+                            if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
+
+                                $oopMappedController->$pageMethodName();
+
+                            } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
+                                //$config["route_rel_template_context"]
+                                $oopMappedController->$pageMethodName();
+
+                            } else {
+
+                                    //Alert User to Define Correct Route related Template Context
+                                    echo "Invalid Route related Template Context Definition.<br>";
+
+                            }
+                            
 
                     } else {
 
