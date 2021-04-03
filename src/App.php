@@ -36,6 +36,7 @@ use \EaseAppPHP\Foundation\BaseApplication;
 //use \EaseAppPHP\Providers\AppServiceProvider;
 //use \EaseAppPHP\Providers\RouteServiceProvider;
  
+
 /**
  * App Class
  *
@@ -68,6 +69,7 @@ Class App extends BaseApplication
 	protected $middlewareProcessor;
         protected $routesList;
         protected $matchedRouteResponse;
+        protected $matchedController;
         
         /**
         * All of the registered service providers.
@@ -277,57 +279,20 @@ Class App extends BaseApplication
 
                         echo "Load Procedural Route Controller<br>\n";
                         
-                        $proceduralController = new $pageControllerClassName();
-                        
-                        //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
-                        if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
-
-                            $proceduralController->processAjaxApiCall($pageRouteType, $pageFilename);
-
-                        } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
-                            //$config["route_rel_template_context"]
-                            $proceduralController->processWebCall($pageRouteType, $this->getConfig()["first-config"]["route_rel_template_context"], $this->getConfig()["first-config"]["chosen_template"], $this->getConfig()["first-config"]["chosen_frontend_template"], $pageFilename);
-
-                        } else {
-
-                                //Alert User to Define Correct Route related Template Context
-                                echo "Invalid Route related Template Context Definition.<br>";
-
-                        }
-                        
-                        //$proceduralController = new ProceduralController();
-                        /*
-                        //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
-                        //if (($page_is_ajax == "1") && ($page_is_frontend == "3")) {
-                        if (($page_route_type == "ajax") || ($page_route_type == "soap-web-service") || ($page_route_type == "rest-web-service") || ($page_route_type == "ajax-web-service-common")) {
-
-                            $proceduralController->processAjaxApiCall($page_filename);
-
-                        } elseif (($page_route_type == "frontend-web-app") || ($page_route_type == "backend-web-app") || ($page_route_type == "web-app-common")) {
-                            //$config["route_rel_template_context"]
-                            $proceduralController->processWebCall($templateName, $page_filename);
-
-                        } else {
-
-                                //Alert User to Define Correct Route related Template Context
-                                echo "Invalid Route related Template Context Definition.<br>";
-
-                        }*/
-
-                    } else if ((isset($pageControllerType)) && ($pageControllerType == "oop-mapped")) {
-
-                            echo "Load oop-mapped Route Controller<br>\n";
+                        if (class_exists($pageControllerClassName)) {
+                            $matchedController = new $pageControllerClassName();
                             
-                            $oopMappedController = new $pageControllerClassName();
-                        
+                            $this->container->instance('MatchedControllerName', $matchedController);
+                            $this->matchedController = $this->container->get('MatchedControllerName'); 
+                            
                             //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
                             if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
 
-                                $oopMappedController->$pageMethodName();
+                                $this->matchedController->processAjaxApiCall($pageRouteType, $pageFilename);
 
                             } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
                                 //$config["route_rel_template_context"]
-                                $oopMappedController->$pageMethodName();
+                                $this->matchedController->processWebCall($pageRouteType, $this->getConfig()["first-config"]["route_rel_template_context"], $this->getConfig()["first-config"]["chosen_template"], $this->getConfig()["first-config"]["chosen_frontend_template"], $pageFilename);
 
                             } else {
 
@@ -335,6 +300,60 @@ Class App extends BaseApplication
                                     echo "Invalid Route related Template Context Definition.<br>";
 
                             }
+                
+                        } else {
+                            echo $pageControllerClassName . "does not exist!";
+                        }
+                        
+                        
+                    } else if ((isset($pageControllerType)) && ($pageControllerType == "oop-mapped")) {
+
+                            echo "Load oop-mapped Route Controller<br>\n";
+                            
+//                            $oopMappedController = new $pageControllerClassName();
+//                        
+//                            //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+//                            if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
+//
+//                                $oopMappedController->$pageMethodName();
+//
+//                            } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
+//                                //$config["route_rel_template_context"]
+//                                $oopMappedController->$pageMethodName();
+//
+//                            } else {
+//
+//                                    //Alert User to Define Correct Route related Template Context
+//                                    echo "Invalid Route related Template Context Definition.<br>";
+//
+//                            }
+                            
+                            if (class_exists($pageControllerClassName)) {
+                                $matchedController = new $pageControllerClassName();
+                            
+                                $this->container->instance('MatchedControllerName', $matchedController);
+                                $this->matchedController = $this->container->get('MatchedControllerName'); 
+
+                                //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+                                if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
+
+                                    $this->matchedController->$pageMethodName();
+
+                                } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
+                                    //$config["route_rel_template_context"]
+                                    $this->matchedController->$pageMethodName();
+
+                                } else {
+
+                                        //Alert User to Define Correct Route related Template Context
+                                        echo "Invalid Route related Template Context Definition.<br>";
+
+                                }
+
+                            } else {
+                                echo $pageControllerClassName . "does not exist!";
+                            }
+
                             
 
                     } else {
@@ -343,7 +362,7 @@ Class App extends BaseApplication
 
                     }
                 } else {
-                    //do automated check for oop controller enumeration
+                    /* //do automated check for oop controller enumeration
                     
                     if ("success" == "success") {
                         //oop enumeration success
@@ -352,7 +371,10 @@ Class App extends BaseApplication
                     } else {
                         //echo "404 error";
 						echo "404 error<br>\n";
-                    }
+                    } */
+					
+                    echo "404 error<br>\n";
+					
                 }
 				
                 // RUN MIDDLEWARE using HTTPHandlerRunner Laminas Library
