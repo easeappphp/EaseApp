@@ -49,9 +49,9 @@ Class App extends BaseApplication
 	protected $container;
 	protected $middlewareQueue = [];
 	protected $eaIsConsoleinstance;
-        protected $eaRequestConsoleStatusResult;
+    protected $eaRequestConsoleStatusResult;
 	protected $kernelInstance;
-        protected $collectedConfigData = [];
+    protected $collectedConfigData = [];
 	protected $config = [];        
 	protected $eaTimerInstance;
 	//protected $psr15ServerRequestHandlerInstance;
@@ -59,7 +59,7 @@ Class App extends BaseApplication
 	protected $initResult;
 	protected $eaRouterinstance;
 	protected $middlewarePipeQueue;
-        protected $middlewarePipeQueueEntries;
+    protected $middlewarePipeQueueEntries;
 	protected $middlewareProcessedResponse;
 	protected $serverRequestProcessedResponse;
 	protected $serverRequestFinalProcessedResponse;
@@ -67,25 +67,28 @@ Class App extends BaseApplication
 	protected $sapiStreamInstance;
 	protected $requestHandlerRunnerServerInstance;
 	protected $middlewareProcessor;
-        protected $routesList;
-        protected $matchedRouteResponse;
-        protected $matchedController;
-        
-        /**
-        * All of the registered service providers.
-        *
-        * @var \Illuminate\Support\ServiceProvider[]
-        */
-        protected $serviceProviders = [];
-        protected $eaServiceProvidersList;
+	protected $routesList;
+	protected $matchedRouteResponse;
+	protected $matchedController;
+	protected $matchedRouteKey;
+	protected $matchedRouteDetails;
+	
+	/**
+	* All of the registered service providers.
+	*
+	* @var \Illuminate\Support\ServiceProvider[]
+	*/
+	protected $serviceProviders = [];
+	protected $eaServiceProvidersList;
 
-        /**
-        * The names of the loaded service providers.
-        *
-        * @var array
-        */
-        protected $loadedProviders = [];
-        protected $eaLoadedServiceProvidersList;
+	/**
+	* The names of the loaded service providers.
+	*
+	* @var array
+	*/
+	protected $loadedProviders = [];
+	protected $eaLoadedServiceProvidersList;
+		
 	
 	/**
 	 * Accepts .env file path and loads the values into $ENV Superglobals. Also, Creates a Container.
@@ -243,37 +246,43 @@ Class App extends BaseApplication
                 $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
                 
-                //$matchedPageFilename = $this->container->get('matchedRouteResponse')["matched_page_filename"];
-                $matchedPageFilename =  $this->matchedRouteResponse["matched_page_filename"];
+                /* $matchedRouteKey =  $this->matchedRouteResponse["matched_route_key"];
+				
+				$this->container->instance('MatchedRouteKey', $matchedRouteKey);
+                $this->matchedRouteKey = $this->container->get('MatchedRouteKey'); 
                 
-                foreach($this->routesList as $key => $value){
-                    if($key ==  $matchedPageFilename){
-                        //print_r($value);
-                        $pageFilename = $value["page_filename"];
-                        echo "pageFilename: " . $pageFilename . "<br>\n";
-                        $pageRouteType = $value["route_type"];
-                        echo "pageRouteType: " . $pageRouteType . "<br>\n";
-			$pageControllerType = $value["controller_type"];
-                        echo "pageControllerType: " . $pageControllerType . "<br>\n";
-                        $pageControllerClassName = $value["controller_class_name"];
-                        echo "pageControllerClassName: " . $pageControllerClassName . "<br>\n";
-                        $pageMethodName = $value["method_name"];
-                        echo "pageMethodName: " . $pageMethodName . "<br>\n";
-                        $pageWithMiddleware = $value["with_middleware"];
-                        echo "pageWithMiddleware: " . $pageWithMiddleware . "<br>\n";
-                        $pageWithoutMiddleware = $value["without_middleware"];
-                        echo "pageWithoutMiddleware: " . $pageWithoutMiddleware . "<br>\n";
-                        if($pageWithMiddleware != ""){
-                            $pageWithMiddlewareArray = explode(",", $pageWithMiddleware);
-                        }
-                        if($pageWithoutMiddleware != ""){
-                            $pageWithoutMiddlewareArray = explode(",", $pageWithoutMiddleware);
-                        }
-                        break;
-                    }
-                }
-
-                if ((isset($matchedPageFilename)) && ($matchedPageFilename != "header-response-only-404-not-found")) {
+                $matchedRouteDetails = $this->routesList[$this->matchedRouteKey];
+				
+				$this->container->instance('MatchedRouteDetails', $matchedRouteDetails);
+                $this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
+                 */
+				
+				$this->matchedRouteKey = $this->container->get('MatchedRouteKey'); 
+                
+                $this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
+                
+				$pageFilename = $this->matchedRouteDetails["page_filename"];
+				echo "pageFilename: " . $pageFilename . "<br>\n";
+				$pageRouteType = $this->matchedRouteDetails["route_type"];
+				echo "pageRouteType: " . $pageRouteType . "<br>\n";
+				$pageControllerType = $this->matchedRouteDetails["controller_type"];
+				echo "pageControllerType: " . $pageControllerType . "<br>\n";
+				$pageControllerClassName = $this->matchedRouteDetails["controller_class_name"];
+				echo "pageControllerClassName: " . $pageControllerClassName . "<br>\n";
+				$pageMethodName = $this->matchedRouteDetails["method_name"];
+				echo "pageMethodName: " . $pageMethodName . "<br>\n";
+				$pageWithMiddleware = $this->matchedRouteDetails["with_middleware"];
+				echo "pageWithMiddleware: " . $pageWithMiddleware . "<br>\n";
+				$pageWithoutMiddleware = $this->matchedRouteDetails["without_middleware"];
+				echo "pageWithoutMiddleware: " . $pageWithoutMiddleware . "<br>\n";
+				if($pageWithMiddleware != ""){
+					$pageWithMiddlewareArray = explode(",", $pageWithMiddleware);
+				}
+				if($pageWithoutMiddleware != ""){
+					$pageWithoutMiddlewareArray = explode(",", $pageWithoutMiddleware);
+				}
+				
+                if ((isset($this->matchedRouteKey)) && ($this->matchedRouteKey != "header-response-only-404-not-found")) {
                     //oop_mapped controller or procedural controller
                     if ((isset($pageControllerType)) && ($pageControllerType == "procedural")) {
 
@@ -302,7 +311,7 @@ Class App extends BaseApplication
                             }
                 
                         } else {
-                            echo $pageControllerClassName . "does not exist!";
+                            echo $pageControllerClassName . " does not exist!";
                         }
                         
                         
@@ -351,7 +360,7 @@ Class App extends BaseApplication
                                 }
 
                             } else {
-                                echo $pageControllerClassName . "does not exist!";
+                                echo $pageControllerClassName . " does not exist!";
                             }
 
                             

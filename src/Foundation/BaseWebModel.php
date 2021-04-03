@@ -1,31 +1,66 @@
 <?php
 namespace EaseAppPHP\Foundation;
 
+use \EaseAppPHP\Foundation\Interfaces\ArrayableInterface;
 
-if ((interface_exists('ArrayAccess')) && (interface_exists('Arrayable')) && (interface_exists('JsonSerializable'))) {
-    class BaseWebModel implements ArrayAccess, Arrayable, JsonSerializable
+
+if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')) && (interface_exists('\Countable')) && (interface_exists('\EaseAppPHP\Foundation\Interfaces\ArrayableInterface'))) {
+    class BaseWebModel implements \ArrayAccess, \JsonSerializable, \Countable, ArrayableInterface
     {
 
         protected $container;
 
-        /**
-         * The middleware registered on the controller.
-         *
-         * @var array
-         */
-        protected $middleware = [];
+        public function offsetExists ($offset) {
 
+			return isset($this->container[$offset]);
 
-        /**
-         * Get the middleware assigned to the controller.
-         *
-         * @return array
-         */
-        public function getMiddleware()
-        {
-            return $this->middleware;
-        }
+		}
 
-    }
+		public function offsetGet ($offset) {
+
+			return isset($this->container[$offset]) ? $this->container[$offset] : null;
+
+		}
+
+		public function offsetSet ($offset, $value) {
+
+			if (is_null($offset)) {
+			  $this->container[] = $value;
+			} else {
+			  $this->container[$offset] = $value;
+			}
+
+		}
+
+		public function offsetUnset ($offset) {
+
+			unset($this->container[$offset]);
+
+		}
+		
+		/**
+		 * Do JSON Serialize based upon JsonSerializable interface
+		 *
+		 * @return array
+		 */
+		public function jsonSerialize(){
+			return [];
+		}
+		
+		
+		/**
+		 * Get the instance as an array.
+		 *
+		 * @return array
+		 */
+		public function toArray(){
+			return [];
+		}
+		
+		public function count() : int {
+			return count($this->container);
+		}
+	
+	}
 }
 
