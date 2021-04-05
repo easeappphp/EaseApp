@@ -242,6 +242,9 @@ Class App extends BaseApplication
             
                 //Web
                 
+				$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+				echo "Query Params: <br>";
+				var_dump($this->serverRequest->getQueryParams());
                 $this->routesList = $this->container->get('routes');
                 $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
@@ -346,11 +349,13 @@ Class App extends BaseApplication
                                 //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
                                 if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
 
-                                    $this->matchedController->$pageMethodName();
+                                    //$this->matchedController->$pageMethodName();
+									$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
 
                                 } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
                                     //$config["route_rel_template_context"]
-                                    $this->matchedController->$pageMethodName();
+                                    //$this->matchedController->$pageMethodName();
+									$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
 
                                 } else {
 
@@ -371,16 +376,16 @@ Class App extends BaseApplication
 
                     }
                 } else {
-                    /* //do automated check for oop controller enumeration
+                    //do automated check for oop controller enumeration
                     
-                    if ("success" == "success") {
+                    //if ("success" == "success") {
                         //oop enumeration success
-						echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route<br>\n";
+						//echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route<br>\n";
 						
-                    } else {
+                    //} else {
                         //echo "404 error";
-						echo "404 error<br>\n";
-                    } */
+						//echo "404 error<br>\n";
+                    //} 
 					
                     echo "404 error<br>\n";
 					
@@ -412,9 +417,9 @@ Class App extends BaseApplication
                 $this->requestHandlerRunnerServerInstance = $this->container->get('\Laminas\HttpHandlerRunner\RequestHandlerRunner');
 
                 $this->requestHandlerRunnerServerInstance->run();
+				 
 
-
-                /*  //https://docs.laminas.dev/laminas-httphandlerrunner/emitters/
+                /*    //https://docs.laminas.dev/laminas-httphandlerrunner/emitters/
                 //Define Max Buffer Length for Files
                 $maxBufferLength = (int) "8192";
 
@@ -450,11 +455,11 @@ Class App extends BaseApplication
 
                 $this->emitterStackInstance->push(new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter());
                 $this->emitterStackInstance->push($conditionalEmitter);
-
+ */
 
                 //print_r($this->emitterStackInstance);
                 //var_dump($conditionalEmitter);
-                 */
+                 
 
                 //var_dump($this->middlewareProcessedResponse);
                 /* echo 'HTTP_HOST: ' . $this->serverRequest->getServerParams()['HTTP_HOST'];

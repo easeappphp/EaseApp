@@ -33,32 +33,56 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
          * @param  array  $parameters
          * @return \Symfony\Component\HttpFoundation\Response
          */
-        public function callAction($method, $parameters)
+        public function callAction($method, $parametersArray)
         {
-            return call_user_func_array([$this, $method], $parameters);
-            /*$handler = array( 'MyClass', 'MyMethod');
-            $params = array(1,2,3,4);
+            //return call_user_func_array([$this, $method], $parameters);
+			$handler = array($this, $method);
 
             if (is_callable($handler)) { 
-                call_user_func_array($handler , $params);
-            }*/
+                return call_user_func_array($handler, $parametersArray);
+            }			
+			
         }
 
         /**
          * Handle calls to missing methods on the controller.
          *
          * @param  string  $method
-         * @param  array  $parameters
+         * @param  array  $parametersArray
          * @return mixed
          *
          * @throws \BadMethodCallException
          */
-        public function __call($method, $parameters)
+        public function __call($method, $parametersArray)
         {
-            throw new BadMethodCallException(sprintf(
+            throw new \BadMethodCallException(sprintf(
                 'Method %s::%s does not exist.', static::class, $method
             ));
+			
+			/* $parametersImploded = implode(', ', $parametersArray);
+            print "Call to method $method() with parameters '$parametersImploded' failed!\n";
+			 */
         }
+		
+		/**
+		 * Handle calls to missing static methods on the controller.
+		 *
+		 * @param  string  $method
+		 * @param  array  $parametersArray
+		 * @return mixed
+		 *
+		 * @throws \BadMethodCallException
+		 */
+		public static function __callStatic($method, $parametersArray)
+		{
+			throw new \BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
+			
+			/* // Note: value of $method is case sensitive.
+			echo "Call to static method $method() with parameters "
+				 . implode(', ', $parametersArray). "failed!\n"; */
+		}
 
 
     }
