@@ -7,8 +7,18 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
     {
 
         protected $container;
+		protected $matchedRouteDetails;
+		protected $queryParams;
 
-        /**
+        public function __construct($matchedRouteDetails, $queryParams)
+		{
+			
+			$this->matchedRouteDetails = $matchedRouteDetails;
+			$this->queryParams = $queryParams;
+			
+		}
+		
+		/**
          * The middleware registered on the controller.
          *
          * @var array
@@ -37,9 +47,12 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
         {
             //return call_user_func_array([$this, $method], $parameters);
 			$handler = array($this, $method);
-
+			echo "\ncallAction:\n";
+			var_dump($parametersArray);
+			$parametersArrayValues = array_values($parametersArray);
+			
             if (is_callable($handler)) { 
-                return call_user_func_array($handler, $parametersArray);
+                return call_user_func_array($handler, $parametersArrayValues);
             }			
 			
         }
