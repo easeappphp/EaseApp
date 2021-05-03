@@ -7,12 +7,14 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
     {
 
         protected $container;
+		protected $eaConfig;
 		protected $matchedRouteDetails;
 		protected $queryParams;
 
-        public function __construct($matchedRouteDetails, $queryParams)
+        public function __construct($eaConfig, $matchedRouteDetails, $queryParams)
 		{
 			
+			$this->eaConfig = $eaConfig;
 			$this->matchedRouteDetails = $matchedRouteDetails;
 			$this->queryParams = $queryParams;
 			
@@ -43,7 +45,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
          * @param  array  $parameters
          * @return \Symfony\Component\HttpFoundation\Response
          */
-        public function callAction($method, $parametersArray)
+        /* public function callAction($method, $parametersArray)
         {
             //return call_user_func_array([$this, $method], $parameters);
 			$handler = array($this, $method);
@@ -55,7 +57,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
                 return call_user_func_array($handler, $parametersArrayValues);
             }			
 			
-        }
+        } */
 
         /**
          * Handle calls to missing methods on the controller.

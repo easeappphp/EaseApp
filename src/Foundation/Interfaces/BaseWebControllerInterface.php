@@ -22,7 +22,7 @@ interface BaseWebControllerInterface
      * @param  array  $parametersArray
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function callAction($method, $parametersArray);
+    //public function callAction($method, $parametersArray);
 	
     /**
      * Handle calls to missing methods on the controller.

@@ -72,6 +72,7 @@ Class App extends BaseApplication
 	protected $matchedController;
 	protected $matchedRouteKey;
 	protected $matchedRouteDetails;
+	protected $eaConfig;
 	
 	/**
 	* All of the registered service providers.
@@ -187,7 +188,7 @@ Class App extends BaseApplication
                 
             }
             //echo "easerviceproviders:<br>";
-           // var_dump($this->eaServiceProvidersList);
+            // var_dump($this->eaServiceProvidersList);
             //Loop through and Boot Service Providers Next
             foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
                 
@@ -241,7 +242,7 @@ Class App extends BaseApplication
             } else {
             
                 //Web
-                
+                $this->eaConfig = $this->container->get('EAConfig');
 				$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
 				echo "Query Params: <br>";
 				var_dump($this->serverRequest->getQueryParams());
@@ -249,18 +250,7 @@ Class App extends BaseApplication
                 $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
                 
-                /* $matchedRouteKey =  $this->matchedRouteResponse["matched_route_key"];
-				
-				$this->container->instance('MatchedRouteKey', $matchedRouteKey);
                 $this->matchedRouteKey = $this->container->get('MatchedRouteKey'); 
-                
-                $matchedRouteDetails = $this->routesList[$this->matchedRouteKey];
-				
-				$this->container->instance('MatchedRouteDetails', $matchedRouteDetails);
-                $this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
-                 */
-				
-				$this->matchedRouteKey = $this->container->get('MatchedRouteKey'); 
                 
                 $this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
                 
@@ -341,7 +331,8 @@ Class App extends BaseApplication
 //                            }
                             
                             if (class_exists($pageControllerClassName)) {
-                                $matchedController = new $pageControllerClassName();
+                                //$matchedController = new $pageControllerClassName();
+								$matchedController = new $pageControllerClassName($this->eaConfig, $this->matchedRouteDetails, $this->serverRequest->getQueryParams());
                             
                                 $this->container->instance('MatchedControllerName', $matchedController);
                                 $this->matchedController = $this->container->get('MatchedControllerName'); 
@@ -349,13 +340,17 @@ Class App extends BaseApplication
                                 //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
                                 if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
 
-                                    //$this->matchedController->$pageMethodName();
-									$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+                                    $this->matchedController->$pageMethodName();
+									//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+									//$this->matchedController->callAction($pageMethodName, array("three", "four"));
+									//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
 
                                 } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
                                     //$config["route_rel_template_context"]
-                                    //$this->matchedController->$pageMethodName();
-									$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+                                    $this->matchedController->$pageMethodName();
+									//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+									//$this->matchedController->callAction($pageMethodName, array("three", "four"));
+									//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
 
                                 } else {
 
