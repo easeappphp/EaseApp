@@ -61,18 +61,18 @@ class RouteServiceProvider extends ServiceProvider
 
 
 
-            //WORKING var_dump($this->container->get('config')["first-config"]["routing_engine_rule_files"]);
-            //TO TRY var_dump(getDataFromContainer('config')["first-config"]["routing_engine_rule_files"]);
+            //WORKING var_dump($this->container->get('config')["mainconfig"]["routing_engine_rule_files"]);
+            //TO TRY var_dump(getDataFromContainer('config')["mainconfig"]["routing_engine_rule_files"]);
 
             //Get Routes from /routes folder w.r.t. web, ajax, ajax-api-common, rest-api, soap-api related files. This scenario excludes CLI and Channels primarily.
-            $this->routes = $this->eaRouterinstance->getFromFilepathsArray($this->config["first-config"]["routing_engine_rule_files"]);
+            $this->routes = $this->eaRouterinstance->getFromFilepathsArray($this->config["mainconfig"]["routing_engine_rule_files"]);
             //var_dump($this->routes);
             $this->container->instance('routes', $this->routes);
             $this->routeslist = $this->container->get('routes');
             //var_dump($this->routeslist);
 
             //Match Route			
-            $this->matchedRouteResponse = $this->eaRouterinstance->matchRoute($this->routes, $this->serverRequest->getUri()->getPath(), $this->serverRequest->getQueryParams(), $this->serverRequest->getMethod(), $this->config["first-config"]["routing_rule_length"]);
+            $this->matchedRouteResponse = $this->eaRouterinstance->matchRoute($this->routes, $this->serverRequest->getUri()->getPath(), $this->serverRequest->getQueryParams(), $this->serverRequest->getMethod(), $this->config["mainconfig"]["routing_rule_length"]);
             //var_dump($this->matchedRouteResponse);
             $this->container->instance('matchedRouteResponse', $this->matchedRouteResponse);
             //$this->routeslist = $this->container->get('matchedRouteResponse');
@@ -100,10 +100,10 @@ class RouteServiceProvider extends ServiceProvider
                 }
             }
             // echo "<br>";
-            // var_dump($this->config["first-config"]["route_type_middleware_group_mapping"]);
+            // var_dump($this->config["mainconfig"]["route_type_middleware_group_mapping"]);
 
-            if($required_route_type != "" && array_key_exists($required_route_type, $this->config["first-config"]["route_type_middleware_group_mapping"])){
-                $required_route_type_middleware_group_mapping_value = $this->config["first-config"]["route_type_middleware_group_mapping"][$required_route_type];
+            if($required_route_type != "" && array_key_exists($required_route_type, $this->config["mainconfig"]["route_type_middleware_group_mapping"])){
+                $required_route_type_middleware_group_mapping_value = $this->config["mainconfig"]["route_type_middleware_group_mapping"][$required_route_type];
             }
             // Step 1: Do something first
             $appClassData = [

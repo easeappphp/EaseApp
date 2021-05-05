@@ -1,6 +1,7 @@
 <?php
 namespace EaseAppPHP\Foundation;
 
+use Illuminate\Container\Container;
 
 if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterface')) {
     class BaseWebController implements \EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterface
@@ -9,14 +10,28 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
         protected $container;
 		protected $eaConfig;
 		protected $matchedRouteDetails;
+		protected $serverRequest;
 		protected $queryParams;
 
-        public function __construct($eaConfig, $matchedRouteDetails, $queryParams)
+        /* public function __construct(Container $container, $eaConfig, $matchedRouteDetails, $queryParams)
 		{
 			
+			$this->container = $container;
 			$this->eaConfig = $eaConfig;
 			$this->matchedRouteDetails = $matchedRouteDetails;
 			$this->queryParams = $queryParams;
+			
+		} */
+		
+		public function __construct(Container $container)
+		{
+			
+			$this->container = $container;
+			
+			$this->eaConfig = $this->container->get('EAConfig');
+			$this->matchedRouteDetails = $this->container->get('MatchedRouteDetails');
+			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+			$this->queryParams = $this->serverRequest->getQueryParams();
 			
 		}
 		
@@ -25,7 +40,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
          *
          * @var array
          */
-        protected $middleware = [];
+        //protected $middleware = [];
 
 
         /**
@@ -33,10 +48,10 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
          *
          * @return array
          */
-        public function getMiddleware()
+        /*public function getMiddleware()
         {
             return $this->middleware;
-        }
+        }*/
 
         /**
          * Execute an action on the controller.
@@ -58,6 +73,25 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
             }			
 			
         } */
+		
+		/**
+		 * Check if an action exists on the controller.
+		 *
+		 * @param  string  $method
+		 * @return boolean
+		 */
+		public function checkIfActionExists($method)
+		{
+			
+			$handler = array($this, $method);
+			
+			if (is_callable($handler)) { 
+                return true;
+            }
+			
+			return false;
+			
+		}
 
         /**
          * Handle calls to missing methods on the controller.
@@ -98,8 +132,20 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 			echo "Call to static method $method() with parameters "
 				 . implode(', ', $parametersArray). "failed!\n"; */
 		}
-
-
+		
+		/**
+		 * Create View File Name With Path
+		 * Note: View directory names should not contain the . character.
+		 * @return string
+		 */
+		public function createViewFileNameWithPath($pageFileName)
+		{
+			
+			$fileNameParts = str_replace(".", "/", $pageFileName);
+			
+			return $fileNameParts;			
+			
+		}
     }
 }
 

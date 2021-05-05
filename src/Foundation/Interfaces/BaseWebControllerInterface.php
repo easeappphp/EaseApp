@@ -13,7 +13,7 @@ interface BaseWebControllerInterface
      *
      * @return array
      */
-    public function getMiddleware();
+    //public function getMiddleware();
     
     /**
      * Execute an action on the controller.
@@ -23,6 +23,14 @@ interface BaseWebControllerInterface
      * @return \Symfony\Component\HttpFoundation\Response
      */
     //public function callAction($method, $parametersArray);
+	
+	/**
+     * Check if an action exists on the controller.
+     *
+     * @param  string  $method
+     * @return boolean
+     */
+    public function checkIfActionExists($method);
 	
     /**
      * Handle calls to missing methods on the controller.

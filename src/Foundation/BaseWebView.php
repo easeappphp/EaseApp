@@ -6,14 +6,15 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) 
     class BaseWebView implements \EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface
     {
 
-        protected $filename;
-		protected $dataArray;
+        protected $container;
+		protected $viewPageFileName;
+		protected $dataObject;
 
-        public function __construct($filename, $dataArray)
+        public function __construct($viewPageFileName, $dataObject)
 		{
 			
-			$this->filename = $filename;
-			$this->dataArray = $dataArray;
+			$this->viewPageFileName = $viewPageFileName;
+			$this->dataObject = $dataObject;
 			
 		}
 
@@ -25,16 +26,13 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) 
 		 */
 		public function render()
 		{
-			echo "\n echoing render method \n";
-			extract($this->dataArray);
 			
-			echo "name: " . $name . "\n";
-			echo "place: " . $place . "\n";
-			include($this->filename);
+			extract(get_object_vars($this->dataObject));
 			
+			include($this->viewPageFileName);			
 			
 		}
-
+		
     }
 }
 

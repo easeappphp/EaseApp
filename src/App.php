@@ -172,7 +172,7 @@ Class App extends BaseApplication
             $routeServiceProvider->register();*/
             
             //Loop through and Register Service Providers First
-            foreach ($this->getConfig()["first-config"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+            foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
                 
                 //echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
                 //echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
@@ -294,7 +294,7 @@ Class App extends BaseApplication
 
                             } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
                                 //$config["route_rel_template_context"]
-                                $this->matchedController->processWebCall($pageRouteType, $this->getConfig()["first-config"]["route_rel_template_context"], $this->getConfig()["first-config"]["chosen_template"], $this->getConfig()["first-config"]["chosen_frontend_template"], $pageFilename);
+                                $this->matchedController->processWebCall($pageRouteType, $this->getConfig()["mainconfig"]["route_rel_template_context"], $this->getConfig()["mainconfig"]["chosen_template"], $this->getConfig()["mainconfig"]["chosen_frontend_template"], $pageFilename);
 
                             } else {
 
@@ -332,12 +332,19 @@ Class App extends BaseApplication
                             
                             if (class_exists($pageControllerClassName)) {
                                 //$matchedController = new $pageControllerClassName();
-								$matchedController = new $pageControllerClassName($this->eaConfig, $this->matchedRouteDetails, $this->serverRequest->getQueryParams());
+								//$matchedController = new $pageControllerClassName($this->container, $this->eaConfig, $this->matchedRouteDetails, $this->serverRequest->getQueryParams());
+								$matchedController = new $pageControllerClassName($this->container);
                             
                                 $this->container->instance('MatchedControllerName', $matchedController);
-                                $this->matchedController = $this->container->get('MatchedControllerName'); 
-
-                                //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+                                $this->matchedController = $this->container->get('MatchedControllerName');
+								
+								if ($this->matchedController->checkIfActionExists($pageMethodName)) {
+									
+									$this->matchedController->$pageMethodName();
+									
+								}
+								
+								/* //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
                                 if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
 
                                     $this->matchedController->$pageMethodName();
@@ -357,7 +364,7 @@ Class App extends BaseApplication
                                         //Alert User to Define Correct Route related Template Context
                                         echo "Invalid Route related Template Context Definition.<br>";
 
-                                }
+                                } */
 
                             } else {
                                 echo $pageControllerClassName . " does not exist!";
@@ -482,18 +489,18 @@ Class App extends BaseApplication
         */
         public function getConfig()
         {
-            //return $this->config["first-config"];
+            //return $this->config["mainconfig"];
             //echo "<pre>";
             //var_dump($this->config);
             return $this->config;
             //return $this->container->get('config');
-            //return $this->config["first-config"]["providers"];
-            //return $this->config["first-config"]["name"];
-            //return $this->config["first-config"]["routing_engine_rule_files"];
+            //return $this->config["mainconfig"]["providers"];
+            //return $this->config["mainconfig"]["name"];
+            //return $this->config["mainconfig"]["routing_engine_rule_files"];
             //not working return $this->serverRequest->getUri()->getPath();
             //not working return $this->serverRequest->getQueryParams();
             //not working return $this->serverRequest->getMethod();
-            //not working return $this->config["first-config"]["routing_rule_length"];
+            //not working return $this->config["mainconfig"]["routing_rule_length"];
         }
         
         /**

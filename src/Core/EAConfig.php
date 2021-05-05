@@ -8,11 +8,11 @@ namespace EaseAppPHP\Core;
  
 class EAConfig
 {
-	private $config = array();
-	private $singleFileNameExploded = array();
-	private $singleConfigItemArray = array();
-	private $singleConfigItemString = "";
-	private $singleConfigItemNull = null;
+	public $config = array();
+	public $singleFileNameExploded = array();
+	public $singleConfigItemArray = array();
+	public $singleConfigItemString = "";
+	public $singleConfigItemNull = null;
 	
 	/**
 	 * Accepts Extracted Config Array
