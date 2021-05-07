@@ -187,7 +187,7 @@ Class App extends BaseApplication
                 $this->eaServiceProvidersList = $this->container->get('EAServiceProviders'); 
                 
             }
-            //echo "easerviceproviders:";
+            //echo "easerviceproviders:<br>";
             // var_dump($this->eaServiceProvidersList);
             //Loop through and Boot Service Providers Next
             foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
@@ -208,7 +208,7 @@ Class App extends BaseApplication
                 $this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
                 
             }
-            //echo "ealoadedserviceproviderslist:";
+            //echo "ealoadedserviceproviderslist:<br>";
             //var_dump($this->eaLoadedServiceProvidersList);
 
 		
@@ -243,9 +243,9 @@ Class App extends BaseApplication
             
                 //Web
                 $this->eaConfig = $this->container->get('EAConfig');
-				//$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
-				//echo "Query Params: ";
-				//var_dump($this->serverRequest->getQueryParams());
+				$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+				echo "Query Params: <br>";
+				var_dump($this->serverRequest->getQueryParams());
                 $this->routesList = $this->container->get('routes');
                 $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
@@ -255,19 +255,19 @@ Class App extends BaseApplication
                 $this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
                 
 				$pageFilename = $this->matchedRouteDetails["page_filename"];
-				//echo "pageFilename: " . $pageFilename . "\n";
+				echo "pageFilename: " . $pageFilename . "<br>\n";
 				$pageRouteType = $this->matchedRouteDetails["route_type"];
-				//echo "pageRouteType: " . $pageRouteType . "\n";
+				echo "pageRouteType: " . $pageRouteType . "<br>\n";
 				$pageControllerType = $this->matchedRouteDetails["controller_type"];
-				//echo "pageControllerType: " . $pageControllerType . "\n";
+				echo "pageControllerType: " . $pageControllerType . "<br>\n";
 				$pageControllerClassName = $this->matchedRouteDetails["controller_class_name"];
-				//echo "pageControllerClassName: " . $pageControllerClassName . "\n";
+				echo "pageControllerClassName: " . $pageControllerClassName . "<br>\n";
 				$pageMethodName = $this->matchedRouteDetails["method_name"];
-				//echo "pageMethodName: " . $pageMethodName . "\n";
+				echo "pageMethodName: " . $pageMethodName . "<br>\n";
 				$pageWithMiddleware = $this->matchedRouteDetails["with_middleware"];
-				//echo "pageWithMiddleware: " . $pageWithMiddleware . "\n";
+				echo "pageWithMiddleware: " . $pageWithMiddleware . "<br>\n";
 				$pageWithoutMiddleware = $this->matchedRouteDetails["without_middleware"];
-				//echo "pageWithoutMiddleware: " . $pageWithoutMiddleware . "\n";
+				echo "pageWithoutMiddleware: " . $pageWithoutMiddleware . "<br>\n";
 				if($pageWithMiddleware != ""){
 					$pageWithMiddlewareArray = explode(",", $pageWithMiddleware);
 				}
@@ -279,10 +279,10 @@ Class App extends BaseApplication
                     //oop_mapped controller or procedural controller
                     if ((isset($pageControllerType)) && ($pageControllerType == "procedural")) {
 
-                        //echo "Load Procedural Route Controller\n";
+                        echo "Load Procedural Route Controller<br>\n";
                         
                         if (class_exists($pageControllerClassName)) {
-                            $matchedController = new $pageControllerClassName($this->container);
+                            $matchedController = new $pageControllerClassName();
                             
                             $this->container->instance('MatchedControllerName', $matchedController);
                             $this->matchedController = $this->container->get('MatchedControllerName'); 
@@ -299,7 +299,7 @@ Class App extends BaseApplication
                             } else {
 
                                     //Alert User to Define Correct Route related Template Context
-                                    echo "Invalid Route related Template Context Definition.";
+                                    echo "Invalid Route related Template Context Definition.<br>";
 
                             }
                 
@@ -310,7 +310,25 @@ Class App extends BaseApplication
                         
                     } else if ((isset($pageControllerType)) && ($pageControllerType == "oop-mapped")) {
 
-                            //echo "Load oop-mapped Route Controller\n";
+                            echo "Load oop-mapped Route Controller<br>\n";
+                            
+//                            $oopMappedController = new $pageControllerClassName();
+//                        
+//                            //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+//                            if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
+//
+//                                $oopMappedController->$pageMethodName();
+//
+//                            } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
+//                                //$config["route_rel_template_context"]
+//                                $oopMappedController->$pageMethodName();
+//
+//                            } else {
+//
+//                                    //Alert User to Define Correct Route related Template Context
+//                                    echo "Invalid Route related Template Context Definition.<br>";
+//
+//                            }
                             
                             if (class_exists($pageControllerClassName)) {
                                 //$matchedController = new $pageControllerClassName();
@@ -323,12 +341,31 @@ Class App extends BaseApplication
 								if ($this->matchedController->checkIfActionExists($pageMethodName)) {
 									
 									$this->matchedController->$pageMethodName();
-									//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
-									//$this->matchedController->callAction($pageMethodName, array("three", "four"));
-									//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
 									
 								}
 								
+								/* //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
+                                if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
+
+                                    $this->matchedController->$pageMethodName();
+									//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+									//$this->matchedController->callAction($pageMethodName, array("three", "four"));
+									//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
+
+                                } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
+                                    //$config["route_rel_template_context"]
+                                    $this->matchedController->$pageMethodName();
+									//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+									//$this->matchedController->callAction($pageMethodName, array("three", "four"));
+									//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
+
+                                } else {
+
+                                        //Alert User to Define Correct Route related Template Context
+                                        echo "Invalid Route related Template Context Definition.<br>";
+
+                                } */
+
                             } else {
                                 echo $pageControllerClassName . " does not exist!";
                             }
@@ -337,7 +374,7 @@ Class App extends BaseApplication
 
                     } else {
 
-                            echo "Invalid Controller Type Value\n";
+                            echo "Invalid Controller Type Value<br>\n";
 
                     }
                 } else {
@@ -345,22 +382,46 @@ Class App extends BaseApplication
                     
                     //if ("success" == "success") {
                         //oop enumeration success
-						//echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route\n";
+						//echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route<br>\n";
 						
                     //} else {
                         //echo "404 error";
-						//echo "404 error\n";
+						//echo "404 error<br>\n";
                     //} 
 					
-                    echo "404 error\n";
+                    echo "404 error<br>\n";
 					
                 }
 				
-				$viewResponse = $this->container->get('ParsedView');
-				//echo "ParsedView (from controller): \n";
-				//echo $viewResponse; 
-				
-				//https://docs.laminas.dev/laminas-httphandlerrunner/emitters/
+                // RUN MIDDLEWARE using HTTPHandlerRunner Laminas Library
+                //https://docs.laminas.dev/laminas-stratigility/v3/middleware/#middleware
+                $requestHandlerRunnerServer = new \Laminas\HttpHandlerRunner\RequestHandlerRunner(
+                        $this->container->get('middlewarePipeQueueEntries'),
+                        new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter(),
+                        static function () {
+                                return \Laminas\Diactoros\ServerRequestFactory::fromGlobals();
+                                //return $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+                                //return $this->serverRequest;
+                        },
+                        static function (\Throwable $e) {
+                                $response = (new \Laminas\Diactoros\ResponseFactory())->createResponse(500);
+                                $response->getBody()->write(sprintf(
+                                        'An error occurred: %s',
+                                        $e->getMessage
+                                ));
+
+                                return $response;
+                        }
+                );
+                //$requestHandlerRunnerServer->run();
+
+                $this->container->instance('\Laminas\HttpHandlerRunner\RequestHandlerRunner', $requestHandlerRunnerServer);
+                $this->requestHandlerRunnerServerInstance = $this->container->get('\Laminas\HttpHandlerRunner\RequestHandlerRunner');
+
+                $this->requestHandlerRunnerServerInstance->run();
+				 
+
+                /*    //https://docs.laminas.dev/laminas-httphandlerrunner/emitters/
                 //Define Max Buffer Length for Files
                 $maxBufferLength = (int) "8192";
 
@@ -377,10 +438,7 @@ Class App extends BaseApplication
 
                         public function emit(\Psr\Http\Message\ResponseInterface $response) : bool
                         {
-                                $body = $response->getBody();
-								$body->write('\nHello\n');
-
-								if (! $response->hasHeader('Content-Disposition')
+                                if (! $response->hasHeader('Content-Disposition')
                                         && ! $response->hasHeader('Content-Range')
                                 ) {
                                         return false;
@@ -395,58 +453,65 @@ Class App extends BaseApplication
 
                 $this->emitterStackInstance = $this->container->get('\Laminas\HttpHandlerRunner\Emitter\EmitterStack');
 
+                //print_r($this->emitterStackInstance);
+
                 $this->emitterStackInstance->push(new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter());
                 $this->emitterStackInstance->push($conditionalEmitter);
-				
-				$serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
-				
-                // RUN MIDDLEWARE using HTTPHandlerRunner Laminas Library
-                //https://docs.laminas.dev/laminas-stratigility/v3/middleware/#middleware
-                $requestHandlerRunnerServer = new \Laminas\HttpHandlerRunner\RequestHandlerRunner(
-                        $this->middlewarePipeQueueEntries,
-                        $this->emitterStackInstance,
-                        static function () use ($serverRequest) {
-                            return $serverRequest;
-                        },
-                        static function (\Throwable $e) {
-                                $response = (new \Laminas\Diactoros\ResponseFactory())->createResponse(500);
-                                $response->getBody()->write(sprintf(
-                                        'An error occurred: %s',
-                                        $e->getMessage
-                                ));
+ */
 
-                                return $response;
-                        }
-                );
-                
-                $this->container->instance('\Laminas\HttpHandlerRunner\RequestHandlerRunner', $requestHandlerRunnerServer);
-                $this->requestHandlerRunnerServerInstance = $this->container->get('\Laminas\HttpHandlerRunner\RequestHandlerRunner');
+                //print_r($this->emitterStackInstance);
+                //var_dump($conditionalEmitter);
+                 
 
-                $this->requestHandlerRunnerServerInstance->run();
-				
+                //var_dump($this->middlewareProcessedResponse);
+                /* echo 'HTTP_HOST: ' . $this->serverRequest->getServerParams()['HTTP_HOST'];
+
+                if (isset($this->serverRequest->getQueryParams()["user"])) {
+                        $query_param   = $this->serverRequest->getQueryParams()["user"];
+                }
+
+
+                $query   = $this->serverRequest->getQueryParams();
+                echo "<br>query: " . "<br>";
+                print_r($query);
+                echo "<br>";  
+                 */
+
             }
             
-		
-	}
-        
-	/**
-	* Get the config array of the application.
-	*
-	* @return string
-	*/
-	public function getConfig()
-	{
-		return $this->config;
-	}
-	
-	/**
-	* Get the Routing Engine User Rules/Routes array of the application.
-	*
-	* @return string
-	*/
-	public function getRoutes()
-	{
 
 	}
+        
+        /**
+        * Get the config array of the application.
+        *
+        * @return string
+        */
+        public function getConfig()
+        {
+            //return $this->config["mainconfig"];
+            //echo "<pre>";
+            //var_dump($this->config);
+            return $this->config;
+            //return $this->container->get('config');
+            //return $this->config["mainconfig"]["providers"];
+            //return $this->config["mainconfig"]["name"];
+            //return $this->config["mainconfig"]["routing_engine_rule_files"];
+            //not working return $this->serverRequest->getUri()->getPath();
+            //not working return $this->serverRequest->getQueryParams();
+            //not working return $this->serverRequest->getMethod();
+            //not working return $this->config["mainconfig"]["routing_rule_length"];
+        }
+        
+        /**
+        * Get the Routing Engine User Rules/Routes array of the application.
+        *
+        * @return string
+        */
+        public function getRoutes()
+        {
+
+        }
 	
 }
+?>

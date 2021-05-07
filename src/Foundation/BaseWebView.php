@@ -27,9 +27,11 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) 
 		public function render()
 		{
 			
-			extract(get_object_vars($this->dataObject));
+			extract(get_object_vars($this->dataObject), EXTR_SKIP);
 			
-			include($this->viewPageFileName);			
+			ob_start();
+			require $this->viewPageFileName;
+			return ob_get_clean();
 			
 		}
 		
