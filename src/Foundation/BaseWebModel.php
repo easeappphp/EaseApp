@@ -9,15 +9,15 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
     {
 
         protected $container;
-		protected $eaConfig;
+		protected $config;
 		protected $matchedRouteDetails;
 		protected $queryParams;
 		protected $processedModelResponse;
 
-		public function __construct($eaConfig, $matchedRouteDetails, $queryParams)
+		public function __construct($config, $matchedRouteDetails, $queryParams)
 		{
 			
-			$this->eaConfig = $eaConfig;
+			$this->config = $config;
 			$this->matchedRouteDetails = $matchedRouteDetails;
 			$this->queryParams = $queryParams;
 			$this->processedModelResponse = new \stdClass();
@@ -118,11 +118,11 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 			
 			if ($this->matchedRouteDetails["route_type"] == "frontend-web-app") {
 				
-				$routeRelTemplateFolderPathPrefix = $this->eaConfig->config["mainconfig"]["route_rel_templates_folder_path_prefix"] . '/' . $this->eaConfig->config["mainconfig"]["chosen_frontend_template"];			
+				$routeRelTemplateFolderPathPrefix = $this->config["mainconfig"]["route_rel_templates_folder_path_prefix"] . '/' . $this->config["mainconfig"]["chosen_frontend_template"];			
 				
 			} elseif ($this->matchedRouteDetails["route_type"] == "backend-web-app") {
 				
-				$routeRelTemplateFolderPathPrefix = $this->eaConfig->config["mainconfig"]["route_rel_templates_folder_path_prefix"] . '/' . $this->eaConfig->config["mainconfig"]["chosen_template"];
+				$routeRelTemplateFolderPathPrefix = $this->config["mainconfig"]["route_rel_templates_folder_path_prefix"] . '/' . $this->config["mainconfig"]["chosen_template"];
 				
 			} else {
 				

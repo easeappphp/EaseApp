@@ -211,18 +211,6 @@ Class App extends BaseApplication
             //echo "ealoadedserviceproviderslist:";
             //var_dump($this->eaLoadedServiceProvidersList);
 
-		
-		
-            
-		
-            /* //Define Laminas Stratigility Middlewarepipe
-             $middlewarePipe = new \Laminas\Stratigility\MiddlewarePipe();  // API middleware collection
-             $this->container->instance('\Laminas\Stratigility\MiddlewarePipe', $middlewarePipe);
-             $this->middlewarePipeQueue = $this->container->get('\Laminas\Stratigility\MiddlewarePipe');
-
-           */
-
-            
 	}
 	
 	/**
@@ -242,124 +230,8 @@ Class App extends BaseApplication
             } else {
             
                 //Web
-                $this->eaConfig = $this->container->get('EAConfig');
-				//$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
-				//echo "Query Params: ";
-				//var_dump($this->serverRequest->getQueryParams());
-                $this->routesList = $this->container->get('routes');
-                $this->matchedRouteResponse = $this->container->get('matchedRouteResponse');
                 $this->middlewarePipeQueueEntries = $this->container->get('middlewarePipeQueueEntries');
                 
-                $this->matchedRouteKey = $this->container->get('MatchedRouteKey'); 
-                
-                $this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
-                
-				$pageFilename = $this->matchedRouteDetails["page_filename"];
-				//echo "pageFilename: " . $pageFilename . "\n";
-				$pageRouteType = $this->matchedRouteDetails["route_type"];
-				//echo "pageRouteType: " . $pageRouteType . "\n";
-				$pageControllerType = $this->matchedRouteDetails["controller_type"];
-				//echo "pageControllerType: " . $pageControllerType . "\n";
-				$pageControllerClassName = $this->matchedRouteDetails["controller_class_name"];
-				//echo "pageControllerClassName: " . $pageControllerClassName . "\n";
-				$pageMethodName = $this->matchedRouteDetails["method_name"];
-				//echo "pageMethodName: " . $pageMethodName . "\n";
-				$pageWithMiddleware = $this->matchedRouteDetails["with_middleware"];
-				//echo "pageWithMiddleware: " . $pageWithMiddleware . "\n";
-				$pageWithoutMiddleware = $this->matchedRouteDetails["without_middleware"];
-				//echo "pageWithoutMiddleware: " . $pageWithoutMiddleware . "\n";
-				if($pageWithMiddleware != ""){
-					$pageWithMiddlewareArray = explode(",", $pageWithMiddleware);
-				}
-				if($pageWithoutMiddleware != ""){
-					$pageWithoutMiddlewareArray = explode(",", $pageWithoutMiddleware);
-				}
-				
-                if ((isset($this->matchedRouteKey)) && ($this->matchedRouteKey != "header-response-only-404-not-found")) {
-                    //oop_mapped controller or procedural controller
-                    if ((isset($pageControllerType)) && ($pageControllerType == "procedural")) {
-
-                        //echo "Load Procedural Route Controller\n";
-                        
-                        if (class_exists($pageControllerClassName)) {
-                            $matchedController = new $pageControllerClassName($this->container);
-                            
-                            $this->container->instance('MatchedControllerName', $matchedController);
-                            $this->matchedController = $this->container->get('MatchedControllerName'); 
-                            
-                            //Ajax Requests / REST Web Services: This does the loading of the respective resource for ajax / REST Web Service Requests
-                            if (($pageRouteType == "ajax") || ($pageRouteType == "soap-web-service") || ($pageRouteType == "rest-web-service") || ($pageRouteType == "ajax-web-service-common")) {
-
-                                $this->matchedController->processAjaxApiCall($pageRouteType, $pageFilename);
-
-                            } elseif (($pageRouteType == "frontend-web-app") || ($pageRouteType == "backend-web-app") || ($pageRouteType == "web-app-common")) {
-                                //$config["route_rel_template_context"]
-                                $this->matchedController->processWebCall($pageRouteType, $this->getConfig()["mainconfig"]["route_rel_template_context"], $this->getConfig()["mainconfig"]["chosen_template"], $this->getConfig()["mainconfig"]["chosen_frontend_template"], $pageFilename);
-
-                            } else {
-
-                                    //Alert User to Define Correct Route related Template Context
-                                    echo "Invalid Route related Template Context Definition.";
-
-                            }
-                
-                        } else {
-                            echo $pageControllerClassName . " does not exist!";
-                        }
-                        
-                        
-                    } else if ((isset($pageControllerType)) && ($pageControllerType == "oop-mapped")) {
-
-                            //echo "Load oop-mapped Route Controller\n";
-                            
-                            if (class_exists($pageControllerClassName)) {
-                                //$matchedController = new $pageControllerClassName();
-								//$matchedController = new $pageControllerClassName($this->container, $this->eaConfig, $this->matchedRouteDetails, $this->serverRequest->getQueryParams());
-								$matchedController = new $pageControllerClassName($this->container);
-                            
-                                $this->container->instance('MatchedControllerName', $matchedController);
-                                $this->matchedController = $this->container->get('MatchedControllerName');
-								
-								if ($this->matchedController->checkIfActionExists($pageMethodName)) {
-									
-									$this->matchedController->$pageMethodName();
-									//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
-									//$this->matchedController->callAction($pageMethodName, array("three", "four"));
-									//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
-									
-								}
-								
-                            } else {
-                                echo $pageControllerClassName . " does not exist!";
-                            }
-
-                            
-
-                    } else {
-
-                            echo "Invalid Controller Type Value\n";
-
-                    }
-                } else {
-                    //do automated check for oop controller enumeration
-                    
-                    //if ("success" == "success") {
-                        //oop enumeration success
-						//echo "Try Loading the automatically enumerated Route Controller, using the controller parameter position value from the route\n";
-						
-                    //} else {
-                        //echo "404 error";
-						//echo "404 error\n";
-                    //} 
-					
-                    echo "404 error\n";
-					
-                }
-				
-				$viewResponse = $this->container->get('ParsedView');
-				//echo "ParsedView (from controller): \n";
-				//echo $viewResponse; 
-				
 				//https://docs.laminas.dev/laminas-httphandlerrunner/emitters/
                 //Define Max Buffer Length for Files
                 $maxBufferLength = (int) "8192";
@@ -377,10 +249,7 @@ Class App extends BaseApplication
 
                         public function emit(\Psr\Http\Message\ResponseInterface $response) : bool
                         {
-                                $body = $response->getBody();
-								$body->write('\nHello\n');
-
-								if (! $response->hasHeader('Content-Disposition')
+                                if (! $response->hasHeader('Content-Disposition')
                                         && ! $response->hasHeader('Content-Range')
                                 ) {
                                         return false;
