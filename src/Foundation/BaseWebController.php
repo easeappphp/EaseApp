@@ -12,18 +12,9 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 		protected $matchedRouteDetails;
 		protected $serverRequest;
 		protected $queryParams;
+		protected $response;
 
-        /* public function __construct(Container $container, $config, $matchedRouteDetails, $queryParams)
-		{
-			
-			$this->container = $container;
-			$this->config = $config;
-			$this->matchedRouteDetails = $matchedRouteDetails;
-			$this->queryParams = $queryParams;
-			
-		} */
-		
-		public function __construct(Container $container)
+        public function __construct(Container $container)
 		{
 			
 			$this->container = $container;
@@ -32,6 +23,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 			$this->matchedRouteDetails = $this->container->get('MatchedRouteDetails');
 			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
 			$this->queryParams = $this->serverRequest->getQueryParams();
+			$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
 			
 		}
 		

@@ -13,35 +13,35 @@ interface BaseWebResponseInterface
      *
      * 
      */
-    public function setText();
+    public function setText(string $content, int $httpStatusCode = 200);
 	
 	/**
      * Set Content for the response as HTML
      *
      * 
      */
-    public function setHTML();
+    public function setHTML(string $content, int $httpStatusCode = 200);
 	
 	/**
      * Set Content for the response as XML
      *
      * 
      */
-    public function setXML();
+    public function setXML(string $content, int $httpStatusCode = 200);
 	
 	/**
      * Set Content for the response as JSON
      *
      * 
      */
-    public function setJSON();
+    public function setJSON($content, int $httpStatusCode = 200);
 	
 	/**
      * Set Content for the response as EMPTY
      *
      * 
      */
-    public function setEmpty();
+    public function setEmpty(int $httpStatusCode = 204, array $headers = []);
 	
 	/**
      * Set Redirect

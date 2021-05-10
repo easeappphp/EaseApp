@@ -31,6 +31,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 				['Content-Type' => ['text/plain']]
 			);
 			
+			return $this->response;
+			
 		}
 		
 		/**
@@ -46,6 +48,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 				$httpStatusCode,
 				['Content-Type' => ['application/xhtml+xml']]
 			);
+			
+			return $this->response;
 			
 		}
 		
@@ -63,6 +67,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 				['Content-Type' => ['application/hal+xml']]
 			);
 			
+			return $this->response;
+			
 		}
 		
 		/**
@@ -70,14 +76,14 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 *
 		 * 
 		 */
-		public function setJSON(string $content, int $httpStatusCode = 200)
+		public function setJSON($content, int $httpStatusCode = 200)
 		{
 			
-			if ($content instanceof Jsonable) {
+			if (is_object($content)) {
 				
 				$contentJsonEncoded = json_encode($content);
 				
-			} elseif ($content instanceof Arrayable) {
+			} else {
 				
 				$contentJsonEncoded = json_encode($content, true);
 				
@@ -87,6 +93,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 				$httpStatusCode,
 				['Content-Type' => ['application/json']]
 			);
+			
+			return $this->response;
 			
 		}
 		
@@ -100,6 +108,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 			
 			$this->response = new \Laminas\Diactoros\Response\EmptyResponse($httpStatusCode, $headers);
 			
+			return $this->response;
+			
 		}
 		
 		/**
@@ -107,7 +117,12 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 *
 		 * 
 		 */
-		public function setRedirect();
+		public function setRedirect()
+		{
+			
+			
+			
+		}
 		
     }
 }
