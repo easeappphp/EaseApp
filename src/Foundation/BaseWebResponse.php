@@ -76,22 +76,16 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 *
 		 * 
 		 */
-		public function setJSON($content, int $httpStatusCode = 200)
+		public function setJSON($content, int $httpStatusCode = 200, $headers = ['Content-Type' => ['application/json']], $flag = JSON_PRETTY_PRINT)
 		{
 			
-			if (is_object($content)) {
-				
-				$contentJsonEncoded = json_encode($content);
-				
-			} else {
-				
-				$contentJsonEncoded = json_encode($content, true);
-				
-			}
+			$contentJsonEncoded = json_encode($content);
+			
 			$this->response = new \Laminas\Diactoros\Response\JsonResponse(
 				$contentJsonEncoded,
 				$httpStatusCode,
-				['Content-Type' => ['application/json']]
+				$headers,
+				$flag
 			);
 			
 			return $this->response;

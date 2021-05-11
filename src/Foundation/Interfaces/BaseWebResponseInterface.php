@@ -34,7 +34,7 @@ interface BaseWebResponseInterface
      *
      * 
      */
-    public function setJSON($content, int $httpStatusCode = 200);
+    public function setJSON($content, int $httpStatusCode = 200, $headers = ['Content-Type' => ['application/json']], $flag = JSON_PRETTY_PRINT);
 	
 	/**
      * Set Content for the response as EMPTY
