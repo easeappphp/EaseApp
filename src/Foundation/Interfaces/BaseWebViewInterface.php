@@ -2,7 +2,6 @@
 namespace EaseAppPHP\Foundation\Interfaces;
 
 use Closure;
-use Illuminate\Contracts\Container\Container;
 
 interface BaseWebViewInterface
 {
@@ -13,6 +12,6 @@ interface BaseWebViewInterface
      *
      * @return array
      */
-    public function render();
+    public static function render($viewPageFileName, $dataObject);
 	
 }

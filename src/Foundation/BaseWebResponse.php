@@ -46,7 +46,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 			$this->response = new \Laminas\Diactoros\Response\HtmlResponse(
 				$content,
 				$httpStatusCode,
-				['Content-Type' => ['application/xhtml+xml']]
+				['Content-Type' => ['text/html']]
 			);
 			
 			return $this->response;

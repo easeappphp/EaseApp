@@ -6,31 +6,20 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) 
     class BaseWebView implements \EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface
     {
 
-        protected $container;
-		protected $viewPageFileName;
+        protected $viewPageFileName;
 		protected $dataObject;
-
-        public function __construct($viewPageFileName, $dataObject)
-		{
-			
-			$this->viewPageFileName = $viewPageFileName;
-			$this->dataObject = $dataObject;
-			
-		}
-
 
         /**
 		 * Render the View
 		 *
-		 * @return array
 		 */
-		public function render()
+		public static function render($viewPageFileName, $dataObject)
 		{
 			
-			extract(get_object_vars($this->dataObject), EXTR_SKIP);
+			extract(get_object_vars($dataObject), EXTR_SKIP);
 			
 			ob_start();
-			require $this->viewPageFileName;
+			require $viewPageFileName;
 			return ob_get_clean();
 			
 		}
