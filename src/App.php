@@ -89,6 +89,8 @@ Class App extends BaseApplication
 	*/
 	protected $loadedProviders = [];
 	protected $eaLoadedServiceProvidersList;
+	
+	protected $response;
 		
 	
 	/**
@@ -106,10 +108,31 @@ Class App extends BaseApplication
         //public function __construct($container)
         {	
             $this->container = $container;
-            
-            //Load info from .env file
+			
+			//Load info from .env file
             $dotenv = \Dotenv\Dotenv::createImmutable($envFilePath);
             $dotenv->load();
+			
+			//Create a Server Request using Laminas\Diactoros PSR-7 Library
+            // Returns new ServerRequest instance, using values from superglobals:
+            $serverRequestInstance = \Laminas\Diactoros\ServerRequestFactory::fromGlobals();
+
+            //Bind an existing "serverRequest" class instance to the container, by defining the Class Name as instance reference in the container
+            $this->container->instance('\Laminas\Diactoros\ServerRequestFactory', $serverRequestInstance);
+			
+			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+			
+			//Create Whoops Error & Exception Handler object
+			$whoops = new \Whoops\Run();
+			$this->container->instance('\Whoops\Run', $whoops);
+		
+			//Create a Response Object
+			$responseInstance = new \EaseAppPHP\Foundation\BaseWebResponse($container);
+
+			//Bind an existing "response" class instance to the container, by defining the Class Name as instance reference in the container
+			$this->container->instance('\EaseAppPHP\Foundation\BaseWebResponse', $responseInstance);
+			
+			$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
             
             
             //Bind an existing "config" class instance to the container, by defining the Class Name as instance reference in the container
@@ -165,52 +188,89 @@ Class App extends BaseApplication
 	 */
 	public function init()
 	{
-            /*$appServiceProvider = new \EaseAppPHP\Providers\AppServiceProvider($this->container);
-            $appServiceProvider->register();
+            if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
+                
+                //Console
+                if ($this->serverRequest->getServerParams()['APP_DEBUG'] == "true") {
+					
+					$whoopsHandler = $this->container->get('\Whoops\Run');
+					$whoopsHandler->pushHandler(new \Whoops\Handler\PlainTextHandler());
+					$whoopsHandler->register();
+					
+				}
+				
+            } else {
             
-            $routeServiceProvider = new \EaseAppPHP\Providers\RouteServiceProvider($this->container);
-            $routeServiceProvider->register();*/
-            
-            //Loop through and Register Service Providers First
-            foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
-                
-                //echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
-                //echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
-                
-                $registeredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
-                $registeredServiceProviders[$serviceProvidersArrayRowKey]->register();
-                //echo $serviceProvidersArrayRowValue;
-                $this->serviceProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
-                
-                //Save available Serviceproviders to Container
-                $this->container->instance('EAServiceProviders', $this->serviceProviders);
-                $this->eaServiceProvidersList = $this->container->get('EAServiceProviders'); 
-                
-            }
-            //echo "easerviceproviders:";
-            // var_dump($this->eaServiceProvidersList);
-            //Loop through and Boot Service Providers Next
-            foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
-                
-                //echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
-                //echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
-                
-                //$regiseredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
-                $registeredServiceProviders[$serviceProvidersArrayRowKey]->boot();
-                
-                //https://stackoverflow.com/questions/829823/can-you-create-instance-properties-dynamically-in-php
-                //https://stackoverflow.com/questions/33486639/create-an-object-inside-for-loop
+                //Web
+				if ($this->serverRequest->getServerParams()['APP_DEBUG'] == "true") {
+					
+					//Note: Plaintexthandler to be defined for logging additionally
+					$whoopsHandler = $this->container->get('\Whoops\Run');
+					$whoopsHandler->pushHandler(new \Whoops\Handler\PrettyPageHandler());
+					//$whoopsHandler->pushHandler(new \Whoops\Handler\PlainTextHandler());
+					//$whoopsHandler->pushHandler(new \Whoops\Handler\XmlResponseHandler());
+					//$whoopsHandler->pushHandler(new \Whoops\Handler\JsonResponseHandler());
+					$whoopsHandler->register();
+					
+					
+					//throw new \RuntimeException("Oopsie!");
+					
+				} else {
+					
+					$whoopsHandler = $this->container->get('\Whoops\Run');
+					$whoopsHandler->pushHandler(new \Whoops\Handler\PlainTextHandler());
+					$whoopsHandler->register();
+					
+				}
+				
+				/*$appServiceProvider = new \EaseAppPHP\Providers\AppServiceProvider($this->container);
+				$appServiceProvider->register();
+				
+				$routeServiceProvider = new \EaseAppPHP\Providers\RouteServiceProvider($this->container);
+				$routeServiceProvider->register();*/
+				
+				//Loop through and Register Service Providers First
+				foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+					
+					//echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
+					//echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
+					
+					$registeredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
+					$registeredServiceProviders[$serviceProvidersArrayRowKey]->register();
+					//echo $serviceProvidersArrayRowValue;
+					$this->serviceProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
+					
+					//Save available Serviceproviders to Container
+					$this->container->instance('EAServiceProviders', $this->serviceProviders);
+					$this->eaServiceProvidersList = $this->container->get('EAServiceProviders'); 
+					
+				}
+				//echo "easerviceproviders:";
+				// var_dump($this->eaServiceProvidersList);
+				//Loop through and Boot Service Providers Next
+				foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+					
+					//echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
+					//echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
+					
+					//$regiseredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
+					$registeredServiceProviders[$serviceProvidersArrayRowKey]->boot();
+					
+					//https://stackoverflow.com/questions/829823/can-you-create-instance-properties-dynamically-in-php
+					//https://stackoverflow.com/questions/33486639/create-an-object-inside-for-loop
 
-                $this->loadedProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
-                
-                //Save available Serviceproviders to Container
-                $this->container->instance('EALoadedServiceProviders', $this->loadedProviders);
-                $this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
-                
-            }
-            //echo "ealoadedserviceproviderslist:";
-            //var_dump($this->eaLoadedServiceProvidersList);
-
+					$this->loadedProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
+					
+					//Save available Serviceproviders to Container
+					$this->container->instance('EALoadedServiceProviders', $this->loadedProviders);
+					$this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
+					
+				}
+				//echo "ealoadedserviceproviderslist:";
+				//var_dump($this->eaLoadedServiceProvidersList);
+				
+			}	
+			
 	}
 	
 	/**
