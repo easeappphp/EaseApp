@@ -133,6 +133,15 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 			return $routeRelTemplateFolderPathPrefix;	
 			
 		}
+		
+		public static function renderHtml($viewPageFileName)
+		{
+			
+			ob_start();
+			require $viewPageFileName;
+			return ob_get_clean();
+			
+		}
 	
 	}
 }
