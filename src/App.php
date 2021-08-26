@@ -6,35 +6,14 @@ namespace EaseAppPHP;
 use Illuminate\Container\Container;
 use EaseAppPHP\Core\EAConfig;
 use EaseAppPHP\Core\EAIsConsole;
-//use EaseAppPHP\Core\EAHandleData;
-//use EaseAppPHP\Http\Middleware\Kernel;
-//use EaseAppPHP\Core\EAMiddlewareProcessor;
-
-//use Middlewares;
-
-//use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-
-//use Psr\Http\Message\ResponseInterface;
-
-//use Psr\Http\Message\ServerRequestInterface;
 use Laminas\Diactoros\Response\TextResponse;
 use Laminas\Stratigility\MiddlewarePipe;
-
-
 use Psr\Log\LoggerInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
-
-/* use EaseAppPHP\Middleware\HelloWorld123Middleware;
-use EaseAppPHP\Middleware\HelloWorldMiddleware;
- */
-//use EARouter\EARouter;
 use \EaseAppPHP\Foundation\BaseApplication;
-//use \EaseAppPHP\Foundation\ServiceProvider;
-//use \EaseAppPHP\Providers\AppServiceProvider;
-//use \EaseAppPHP\Providers\RouteServiceProvider;
  
 
 /**
@@ -42,7 +21,6 @@ use \EaseAppPHP\Foundation\BaseApplication;
  *
  */
  
-//class App
 Class App extends BaseApplication
 {
 	protected $app;
@@ -54,7 +32,6 @@ Class App extends BaseApplication
     protected $collectedConfigData = [];
 	protected $config = [];        
 	protected $eaTimerInstance;
-	//protected $psr15ServerRequestHandlerInstance;
 	protected $serverRequest;
 	protected $initResult;
 	protected $eaRouterinstance;
@@ -159,15 +136,6 @@ Class App extends BaseApplication
 
             $this->container->instance('config', $this->collectedConfigData);                
             $this->config = $this->container->get('config');   
-            
-            
-            /*//EAHandleData Class
-            $eaHandleData = new EAHandleData($container);
-            $this->container->instance('EAHandleData', $eaHandleData);
-            
-            //$eaHandleData::set("AZ","12");
-            //echo "AZ GET: " . $eaHandleData::get("AZ");*/
-            
             
             //Check if the request is based upon Console or Web
             $eaIsConsole = new EAIsConsole();
