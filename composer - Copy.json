@@ -14,6 +14,8 @@
 		"easeappphp/ea-router": "*",
 		"jeremykendall/php-domain-parser": "^5.5",
 		"paragonie/constant_time_encoding": "^2.3",
+		"paragonie/halite": "4",
+		"paragonie/hidden-string": "^1.0",
 		"ramsey/uuid": "^3.8",
 		"psr/simple-cache": "^1.0",	
         "middlewares/error-handler": "^3.0",
