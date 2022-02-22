@@ -28,6 +28,45 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 		}
 		
 		/**
+         * The middleware registered on the controller.
+         *
+         * @var array
+         */
+        //protected $middleware = [];
+
+
+        /**
+         * Get the middleware assigned to the controller.
+         *
+         * @return array
+         */
+        /*public function getMiddleware()
+        {
+            return $this->middleware;
+        }*/
+
+        /**
+         * Execute an action on the controller.
+         *
+         * @param  string  $method
+         * @param  array  $parameters
+         * @return \Symfony\Component\HttpFoundation\Response
+         */
+        /* public function callAction($method, $parametersArray)
+        {
+            //return call_user_func_array([$this, $method], $parameters);
+			$handler = array($this, $method);
+			echo "\ncallAction:\n";
+			var_dump($parametersArray);
+			$parametersArrayValues = array_values($parametersArray);
+			
+            if (is_callable($handler)) { 
+                return call_user_func_array($handler, $parametersArrayValues);
+            }			
+			
+        } */
+		
+		/**
 		 * Check if an action exists on the controller.
 		 *
 		 * @param  string  $method

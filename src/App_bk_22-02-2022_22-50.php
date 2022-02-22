@@ -104,39 +104,38 @@ Class App extends BaseApplication
          * @param array $configSourceValueData
 	 * @return object
 	 */
-	//public function __construct($envFilePath, $container, $configSource, $configSourceValueDataType, $configSourceValueData)
-	public function __construct($container)
+	public function __construct($envFilePath, $container, $configSource, $configSourceValueDataType, $configSourceValueData)
         //public function __construct($container)
         {	
             $this->container = $container;
 			
-			/* COMMENTED on 23-02-2022 //Load info from .env file
+			//Load info from .env file
             $dotenv = \Dotenv\Dotenv::createImmutable($envFilePath);
-            $dotenv->load(); */
+            $dotenv->load();
 			
-			/* COMMENTED 23-02-2022 //Create a Server Request using Laminas\Diactoros PSR-7 Library
+			//Create a Server Request using Laminas\Diactoros PSR-7 Library
             // Returns new ServerRequest instance, using values from superglobals:
             $serverRequestInstance = \Laminas\Diactoros\ServerRequestFactory::fromGlobals();
 
             //Bind an existing "serverRequest" class instance to the container, by defining the Class Name as instance reference in the container
-            $this->container->instance('\Laminas\Diactoros\ServerRequestFactory', $serverRequestInstance); */
+            $this->container->instance('\Laminas\Diactoros\ServerRequestFactory', $serverRequestInstance);
 			
 			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
 			
-			/* COMMENTED ON 22-02-2022 //Create Whoops Error & Exception Handler object
+			//Create Whoops Error & Exception Handler object
 			$whoops = new \Whoops\Run();
-			$this->container->instance('\Whoops\Run', $whoops); */
+			$this->container->instance('\Whoops\Run', $whoops);
 		
-			/* COMMENTED on 23-02-2022 //Create a Response Object
+			//Create a Response Object
 			$responseInstance = new \EaseAppPHP\Foundation\BaseWebResponse($container);
 
 			//Bind an existing "response" class instance to the container, by defining the Class Name as instance reference in the container
-			$this->container->instance('\EaseAppPHP\Foundation\BaseWebResponse', $responseInstance); */
+			$this->container->instance('\EaseAppPHP\Foundation\BaseWebResponse', $responseInstance);
 			
 			$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
             
             
-            /* COMMENTED ON 22-02-2022 //Bind an existing "config" class instance to the container, by defining the Class Name as instance reference in the container
+            //Bind an existing "config" class instance to the container, by defining the Class Name as instance reference in the container
             $eaConfig = new EAConfig();
             $this->container->instance('EAConfig', $eaConfig);
             
@@ -158,7 +157,7 @@ Class App extends BaseApplication
 
             }
 
-            $this->container->instance('config', $this->collectedConfigData); */                
+            $this->container->instance('config', $this->collectedConfigData);                
             $this->config = $this->container->get('config');   
             
             
