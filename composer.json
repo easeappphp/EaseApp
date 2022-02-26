@@ -5,7 +5,7 @@
 	"require": {
         "ext-json": "*",
 		"ext-intl": "*",
-        "php": ">=7.2",
+        "php": ">=7.4",
 		"vlucas/phpdotenv": "^5.0",
 		"illuminate/container": "^7.21",
 		"laminas/laminas-diactoros": "^2.3",
@@ -20,12 +20,15 @@
         "psr/log": "^1.0|^2.0|^3.0",
 		"monolog/monolog": "^2.3",
         "filp/whoops": "^2.7",
-        "franzl/whoops-middleware": "^1.2"
+        "franzl/whoops-middleware": "^1.2",
+		"mezzio/mezzio-session-ext": "^1.12",
+        "mezzio/mezzio-session": "^1.6",
+        "mezzio/mezzio-csrf": "^1.5"
     },
 	"require-dev": {
         "ext-json": "*",
 		"ext-intl": "*",
-        "php": ">=7.2",
+        "php": ">=7.4",
 		"vlucas/phpdotenv": "^5.0",
 		"illuminate/container": "^7.21",
 		"laminas/laminas-diactoros": "^2.3",
@@ -39,7 +42,10 @@
         "middlewares/error-handler": "^3.0",
         "psr/log": "^1.1",
         "filp/whoops": "^2.7",
-        "franzl/whoops-middleware": "^1.2"
+        "franzl/whoops-middleware": "^1.2",
+		"mezzio/mezzio-session-ext": "^1.12",
+        "mezzio/mezzio-session": "^1.6",
+        "mezzio/mezzio-csrf": "^1.5"
     },
 	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
