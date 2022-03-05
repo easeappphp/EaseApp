@@ -101,15 +101,10 @@ class EAConfig
 		foreach ($multiDimensionalConfigArray as $key => $value) {
 			
 			if (is_array($value) && ! empty($value)) {
-				
 				$this->dotSeparatedKeyBasedConfigArray[$prefix.$key] = $value;
-				
 				$this->dotSeparatedKeyBasedConfigArray = array_merge($this->dotSeparatedKeyBasedConfigArray, $this->generateDotSeparatedKeyBasedConfigArray($value, $prefix.$key.'.'));
-				
 			} else {
-				
 				$this->dotSeparatedKeyBasedConfigArray[$prefix.$key] = $value;
-				
 			}
 			
 		}
@@ -131,7 +126,7 @@ class EAConfig
 			return $this->dotSeparatedKeyBasedConfigArray[$dotSeperatedConfigItem];
 			
 		} else {
-			return null;
+			return "";
 		}
 		
 	}

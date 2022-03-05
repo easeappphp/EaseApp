@@ -15,7 +15,6 @@ class EAConfig
 	public $singleConfigItemArray = array();
 	public $singleConfigItemString = "";
 	public $singleConfigItemNull = null;
-	public $dotSeparatedKeyBasedConfigArray = array();
 	
 	/**
 	 * Accepts Extracted Config Array
@@ -89,51 +88,44 @@ class EAConfig
 	}
 	
 	/**
-	 * Generate dot seperated keys based config array, from the multi-dimensional config array.
+	 * Gets the specific Config Array item from Multi-dimensional Config Array.
 	 *
-	 * @param  array  $multiDimensionalConfigArray
-	 * @param  string $prefix - an optional input parameter as prefix to all generated keys
-	 * @return array
+	 * @param  string  $dotSeperatedConfigItem
+	 * @param  array  $configArray
+	 * @return mixed
 	 */
-	public function generateDotSeparatedKeyBasedConfigArray($multiDimensionalConfigArray, $prefix = '')
+	/*public function getSingleConfigValue($dotSeperatedConfigItem, $configArray)
 	{
-		
-		foreach ($multiDimensionalConfigArray as $key => $value) {
+		if (!is_null($dotSeperatedConfigItem)) {
 			
-			if (is_array($value) && ! empty($value)) {
-				
-				$this->dotSeparatedKeyBasedConfigArray[$prefix.$key] = $value;
-				
-				$this->dotSeparatedKeyBasedConfigArray = array_merge($this->dotSeparatedKeyBasedConfigArray, $this->generateDotSeparatedKeyBasedConfigArray($value, $prefix.$key.'.'));
+			$dotSeperatedConfigItemArray = explode(".", $dotSeperatedConfigItem);
+			
+			$dotSeperatedConfigItemArrayCount = count($dotSeperatedConfigItemArray);
+			
+			if ($dotSeperatedConfigItemArrayCount > 0) {
 				
 			} else {
+				return $singleConfigItemNull;
+			}
+			
+			
+			
+		} else {
+			return $singleConfigItemNull;
+		}
+		foreach ($filepathsArray as $singleFilePath) {
+			
+			$this->singleFileNameExploded = explode(".", basename($singleFilePath));
+			
+			if (stripos($this->singleFileNameExploded[0], " ") === false) {
 				
-				$this->dotSeparatedKeyBasedConfigArray[$prefix.$key] = $value;
+				$this->config[$this->singleFileNameExploded[0]] = require $singleFilePath;
 				
 			}
 			
 		}
-
-		return $this->dotSeparatedKeyBasedConfigArray;
-	}
-	
-	/**
-	 * Gets the specific Config Array item from dot separated key based config array.
-	 *
-	 * @param  string  $dotSeperatedConfigItem
-	 * @return mixed
-	 */
-	public function getDotSeparatedKeyValue($dotSeperatedConfigItem)
-	{
 		
-		if (isset($this->dotSeparatedKeyBasedConfigArray[$dotSeperatedConfigItem])) {
-			
-			return $this->dotSeparatedKeyBasedConfigArray[$dotSeperatedConfigItem];
-			
-		} else {
-			return null;
-		}
-		
-	}
+		return $this->config;
+	}*/
 			
 }

@@ -21,9 +21,7 @@
 		"monolog/monolog": "^2.3",
         "filp/whoops": "^2.7",
         "franzl/whoops-middleware": "^1.2",
-		"mezzio/mezzio-session-ext": "^1.12",
-        "mezzio/mezzio-session": "^1.6",
-        "mezzio/mezzio-csrf": "^1.5"
+        "odan/session": "^5.1"
     },
 	"require-dev": {
         "ext-json": "*",
@@ -43,9 +41,7 @@
         "psr/log": "^1.1",
         "filp/whoops": "^2.7",
         "franzl/whoops-middleware": "^1.2",
-		"mezzio/mezzio-session-ext": "^1.12",
-        "mezzio/mezzio-session": "^1.6",
-        "mezzio/mezzio-csrf": "^1.5"
+        "odan/session": "^5.1"
     },
 	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
@@ -57,7 +53,7 @@
     ],
 	"autoload": {
        
-	   "files": ["src/Helpers/get-environment-variables.php"],
+	   "files": ["src/Helpers/get-environment-variables.php","src/Helpers/session-check-functions.php"],
 	   "psr-4": {
             "EaseAppPHP\\": "src/"
         }
