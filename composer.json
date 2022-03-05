@@ -21,7 +21,8 @@
 		"monolog/monolog": "^2.3",
         "filp/whoops": "^2.7",
         "franzl/whoops-middleware": "^1.2",
-        "odan/session": "^5.1"
+        "odan/session": "^5.1",
+		"easeappphp/pdolight": "^1.0.7"
     },
 	"require-dev": {
         "ext-json": "*",
@@ -41,7 +42,8 @@
         "psr/log": "^1.1",
         "filp/whoops": "^2.7",
         "franzl/whoops-middleware": "^1.2",
-        "odan/session": "^5.1"
+        "odan/session": "^5.1",
+		"easeappphp/pdolight": "^1.0.7"
     },
 	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
