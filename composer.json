@@ -24,7 +24,9 @@
         "odan/session": "^5.1",
 		"easeappphp/pdolight": "^1.0.7",
 		"phpunit/php-timer": "^5.0",
-        "ezyang/htmlpurifier": "^4.14"
+        "ezyang/htmlpurifier": "^4.14",
+        "easeappphp/hmac": "^1.0.2",
+        "easeappphp/json-decode": "^1.0"
     },
 	"require-dev": {
         "ext-json": "*",
@@ -47,7 +49,9 @@
         "odan/session": "^5.1",
 		"easeappphp/pdolight": "^1.0.7",
 		"phpunit/php-timer": "^5.0",
-        "ezyang/htmlpurifier": "^4.14"
+        "ezyang/htmlpurifier": "^4.14",
+        "easeappphp/hmac": "^1.0.2",
+        "easeappphp/json-decode": "^1.0"
     },
 	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
