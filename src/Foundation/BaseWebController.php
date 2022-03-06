@@ -13,6 +13,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 		protected $serverRequest;
 		protected $queryParams;
 		protected $response;
+		protected const RESPONSEHEADER = 'X-Response-Time';
 
         public function __construct(Container $container)
 		{
