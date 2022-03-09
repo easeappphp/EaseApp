@@ -138,7 +138,7 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 		{
 			
 			ob_start();
-			require $viewPageFileName;
+			require htmlspecialchars($viewPageFileName, ENT_QUOTES);
 			return ob_get_clean();
 			
 		}
