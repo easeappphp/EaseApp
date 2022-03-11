@@ -3,6 +3,7 @@ namespace EaseAppPHP\Foundation;
 
 use \EaseAppPHP\Foundation\Interfaces\ArrayableInterface;
 
+use Illuminate\Container\Container;
 
 if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')) && (interface_exists('\Countable')) && (interface_exists('\EaseAppPHP\Foundation\Interfaces\ArrayableInterface'))) {
     class BaseWebModel implements \ArrayAccess, \JsonSerializable, \Countable, ArrayableInterface
@@ -14,9 +15,10 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 		protected $queryParams;
 		protected $processedModelResponse;
 
-		public function __construct($config, $matchedRouteDetails, $queryParams)
+		public function __construct(Container $container, $config, $matchedRouteDetails, $queryParams)
 		{
 			
+			$this->container = $container;
 			$this->config = $config;
 			$this->matchedRouteDetails = $matchedRouteDetails;
 			$this->queryParams = $queryParams;
