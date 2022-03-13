@@ -3,13 +3,13 @@ namespace EaseAppPHP\Foundation;
 
 use \EaseAppPHP\Foundation\Interfaces\ArrayableInterface;
 
-use Illuminate\Container\Container;
+use \Illuminate\Container\Container;
 
 if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')) && (interface_exists('\Countable')) && (interface_exists('\EaseAppPHP\Foundation\Interfaces\ArrayableInterface'))) {
+	
     class BaseWebModel implements \ArrayAccess, \JsonSerializable, \Countable, ArrayableInterface
     {
-
-        protected $container;
+		protected $container;
 		protected $config;
 		protected $matchedRouteDetails;
 		protected $queryParams;
@@ -17,41 +17,39 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 
 		public function __construct(Container $container, $config, $matchedRouteDetails, $queryParams)
 		{
-			
 			$this->container = $container;
 			$this->config = $config;
 			$this->matchedRouteDetails = $matchedRouteDetails;
 			$this->queryParams = $queryParams;
 			$this->processedModelResponse = new \stdClass();
-			
 		}
 
-        public function offsetExists ($offset) {
-
+        public function offsetExists ($offset)
+		{
 			return isset($this->container[$offset]);
-
 		}
 
-		public function offsetGet ($offset) {
-
+		public function offsetGet ($offset)
+		{
 			return isset($this->container[$offset]) ? $this->container[$offset] : null;
-
 		}
 
-		public function offsetSet ($offset, $value) {
-
+		public function offsetSet ($offset, $value)
+		{
 			if (is_null($offset)) {
-			  $this->container[] = $value;
+				
+				$this->container[] = $value;
+			  
 			} else {
-			  $this->container[$offset] = $value;
+				
+				$this->container[$offset] = $value;
+			
 			}
-
 		}
 
-		public function offsetUnset ($offset) {
-
+		public function offsetUnset ($offset)
+		{
 			unset($this->container[$offset]);
-
 		}
 		
 		/**
@@ -62,7 +60,6 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 		public function jsonSerialize(){
 			return [];
 		}
-		
 		
 		/**
 		 * Get the instance as an array.
@@ -84,7 +81,6 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 		 */
 		public function getRouteRelTemplateContext()
 		{
-			
 			//Web Applications: This does the loading of the Modal Aspect (logic with db interaction) respective resource for regular web application requests. 
 			//Values include: (frontend-web-app | backend-web-app | web-app-common). Note: $config["route_rel_template_context"] will have to be defined in model file, for routes with route-type = web-app-common.
 			//$this->getRouteRelTemplateFolderPathPrefix();
@@ -104,7 +100,6 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 			}
 			
 			return $routeRelTemplateContext;			
-			
 		}
 		
 		/**
@@ -114,7 +109,6 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 		 */
 		public function getRouteRelTemplateFolderPathPrefix()
 		{
-			
 			//Web Applications: This does the loading of the Modal Aspect (logic with db interaction) respective resource for regular web application requests. 
 			//Values include: (frontend-web-app | backend-web-app | web-app-common). Note: $config["route_rel_template_context"] will have to be defined in model file, for routes with route-type = web-app-common.
 			
@@ -133,18 +127,15 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 			}
 			
 			return $routeRelTemplateFolderPathPrefix;	
-			
 		}
 		
 		public static function renderHtml($viewPageFileName)
 		{
-			
 			ob_start();
 			require htmlspecialchars($viewPageFileName, ENT_QUOTES);
 			return ob_get_clean();
-			
 		}
 	
 	}
+	
 }
-

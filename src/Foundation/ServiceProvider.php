@@ -1,11 +1,13 @@
 <?php
 namespace EaseAppPHP\Foundation;
 
+use \Illuminate\Container\Container;
+
 if (interface_exists('\EaseAppPHP\Foundation\Interfaces\ServiceProviderInterface')) {
+	
     class ServiceProvider implements \EaseAppPHP\Foundation\Interfaces\ServiceProviderInterface
     {
-
-        protected $container;
+		protected $container;
 
         /**
          * Create a new Illuminate application instance.
@@ -13,7 +15,7 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\ServiceProviderInterface
          * @param  object  $container
          * @return void
          */
-        public function __construct($container)
+        public function __construct(Container $container)
         {
             $this->container = $container;
         }   
@@ -40,5 +42,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\ServiceProviderInterface
 
 
     }
+	
 }
 

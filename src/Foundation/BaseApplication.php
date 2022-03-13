@@ -2,6 +2,7 @@
 namespace EaseAppPHP\Foundation;
 
 if (interface_exists('\EaseAppPHP\Foundation\Interfaces\ApplicationInterface')) {
+	
     class BaseApplication implements \EaseAppPHP\Foundation\Interfaces\ApplicationInterface
 	{
 		/**
@@ -169,8 +170,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\ApplicationInterface')) 
 		{
 		   
 		}
-
 		
 	}
+	
 }
 

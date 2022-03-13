@@ -1,20 +1,19 @@
 <?php
 namespace EaseAppPHP\Foundation;
 
-use Illuminate\Container\Container;
+use \Illuminate\Container\Container;
 
 if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface')) {
+	
     class BaseWebResponse implements \EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
     {
 
         protected $container;
 		protected $response;
 
-        public function __construct($container)
+        public function __construct(Container $container)
 		{
-			
 			$this->container = $container;
-			
 		}
 
         /**
@@ -24,7 +23,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 */
 		public function setText(string $content, int $httpStatusCode = 200)
 		{
-			
 			$this->response = new \Laminas\Diactoros\Response\TextResponse(
 				$content,
 				$httpStatusCode,
@@ -32,7 +30,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 			);
 			
 			return $this->response;
-			
 		}
 		
 		/**
@@ -42,7 +39,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 */
 		public function setHTML(string $content, int $httpStatusCode = 200)
 		{
-			
 			$this->response = new \Laminas\Diactoros\Response\HtmlResponse(
 				$content,
 				$httpStatusCode,
@@ -50,7 +46,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 			);
 			
 			return $this->response;
-			
 		}
 		
 		/**
@@ -60,7 +55,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 */
 		public function setXML(string $content, int $httpStatusCode = 200)
 		{
-			
 			$this->response = new \Laminas\Diactoros\Response\XmlResponse(
 				$content,
 				$httpStatusCode,
@@ -68,7 +62,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 			);
 			
 			return $this->response;
-			
 		}
 		
 		/**
@@ -78,7 +71,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 */
 		public function setJSON($content, int $httpStatusCode = 200, $headers = ['Content-Type' => ['application/json']], $flag = JSON_PRETTY_PRINT)
 		{
-			
 			$contentJsonEncoded = json_encode($content);
 			
 			$this->response = new \Laminas\Diactoros\Response\JsonResponse(
@@ -89,7 +81,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 			);
 			
 			return $this->response;
-			
 		}
 		
 		/**
@@ -99,11 +90,9 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		 */
 		public function setEmpty(int $httpStatusCode = 204, array $headers = [])
 		{
-			
 			$this->response = new \Laminas\Diactoros\Response\EmptyResponse($httpStatusCode, $headers);
 			
 			return $this->response;
-			
 		}
 		
 		/**
@@ -114,10 +103,9 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebResponseInterface
 		public function setRedirect()
 		{
 			
-			
-			
 		}
 		
     }
+	
 }
 

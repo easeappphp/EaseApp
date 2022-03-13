@@ -1,12 +1,11 @@
 <?php
 namespace EaseAppPHP\Foundation;
 
-
 if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) {
+	
     class BaseWebView implements \EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface
     {
-
-        protected $viewPageFileName;
+		protected $viewPageFileName;
 		protected $dataObject;
 
         /**
@@ -15,7 +14,6 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) 
 		 */
 		public static function render($viewPageFileName, $dataObject)
 		{
-			
 			extract(get_object_vars($dataObject), EXTR_SKIP);
 			
 			ob_start();
@@ -26,9 +24,8 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebViewInterface')) 
 			include htmlspecialchars($routeRelTemplateFolderPathPrefix, ENT_QUOTES) . "/footer.php";
 			
 			return ob_get_clean();
-			
 		}
-		
-    }
+	}
+	
 }
 

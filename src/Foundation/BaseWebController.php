@@ -1,13 +1,15 @@
 <?php
+declare(strict_types=1);
+
 namespace EaseAppPHP\Foundation;
 
-use Illuminate\Container\Container;
+use \Illuminate\Container\Container;
 
 if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterface')) {
+	
     class BaseWebController implements \EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterface
     {
-
-        protected $container;
+		protected $container;
 		protected $config;
 		protected $matchedRouteDetails;
 		protected $serverRequest;
@@ -17,15 +19,12 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 
         public function __construct(Container $container)
 		{
-			
 			$this->container = $container;
-			
 			$this->config = $this->container->get('config');
 			$this->matchedRouteDetails = $this->container->get('MatchedRouteDetails');
 			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
 			$this->queryParams = $this->serverRequest->getQueryParams();
 			$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
-			
 		}
 		
 		/**
@@ -36,11 +35,12 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 		 */
 		public function checkIfActionExists($method)
 		{
-			
 			$handler = array($this, $method);
 			
 			if (is_callable($handler)) { 
-                return true;
+        
+				return true;
+				
             }
 			
 			return false;
@@ -94,12 +94,11 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseWebControllerInterfa
 		 */
 		public function createViewFileNameWithPath($pageFileName)
 		{
-			
 			$fileNameParts = preg_replace('/\./', '/', $pageFileName, (substr_count($pageFileName, '.') - 1));
 			
 			return $fileNameParts;			
-			
 		}
     }
+	
 }
 
