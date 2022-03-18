@@ -83,11 +83,65 @@ Class App extends BaseApplication
     {	
 		$this->container = $container;
 		
+		/* COMMENTED on 23-02-2022 //Load info from .env file
+		$dotenv = \Dotenv\Dotenv::createImmutable($envFilePath);
+		$dotenv->load(); */
+		
+		/* COMMENTED 23-02-2022 //Create a Server Request using Laminas\Diactoros PSR-7 Library
+		// Returns new ServerRequest instance, using values from superglobals:
+		$serverRequestInstance = \Laminas\Diactoros\ServerRequestFactory::fromGlobals();
+
+		//Bind an existing "serverRequest" class instance to the container, by defining the Class Name as instance reference in the container
+		$this->container->instance('\Laminas\Diactoros\ServerRequestFactory', $serverRequestInstance); */
+		
 		$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+		
+		/* COMMENTED ON 22-02-2022 //Create Whoops Error & Exception Handler object
+		$whoops = new \Whoops\Run();
+		$this->container->instance('\Whoops\Run', $whoops); */
+	
+		/* COMMENTED on 23-02-2022 //Create a Response Object
+		$responseInstance = new \EaseAppPHP\Foundation\BaseWebResponse($container);
+
+		//Bind an existing "response" class instance to the container, by defining the Class Name as instance reference in the container
+		$this->container->instance('\EaseAppPHP\Foundation\BaseWebResponse', $responseInstance); */
 		
 		$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
 		
+		
+		/* COMMENTED ON 22-02-2022 //Bind an existing "config" class instance to the container, by defining the Class Name as instance reference in the container
+		$eaConfig = new EAConfig();
+		$this->container->instance('EAConfig', $eaConfig);
+		
+		if (($configSource == 'As-Array') && ($configSourceValueDataType == 'array') && (is_array($configSourceValueData))) {
+
+				$this->collectedConfigData = $this->container->get('EAConfig')->getAsArray($configSourceValueData);
+
+		} else if (($configSource == 'From-Single-File') && ($configSourceValueDataType == 'string') && (is_string($configSourceValueData))) {
+
+				$this->collectedConfigData = $this->container->get('EAConfig')->getFromSingleFile($configSourceValueData);
+
+		} else if (($configSource == 'From-Single-Folder') && ($configSourceValueDataType == 'string') && (is_string($configSourceValueData))) {
+
+				$this->collectedConfigData = $this->container->get('EAConfig')->getFromSingleFolder($configSourceValueData);
+
+		} else if (($configSource == 'From-Filepaths-Array') && ($configSourceValueDataType == 'array') && (is_array($configSourceValueData))) {
+
+				$this->collectedConfigData = $this->container->get('EAConfig')->getFromFilepathsArray($configSourceValueData);
+
+		}
+
+		$this->container->instance('config', $this->collectedConfigData); */                
 		$this->config = $this->container->get('config');   
+		
+		
+		/*//EAHandleData Class
+		$eaHandleData = new EAHandleData($container);
+		$this->container->instance('EAHandleData', $eaHandleData);
+		
+		//$eaHandleData::set("AZ","12");
+		//echo "AZ GET: " . $eaHandleData::get("AZ");*/
+		
 		
 		//Check if the request is based upon Console or Web
 		$eaIsConsole = new EAIsConsole();
@@ -117,24 +171,41 @@ Class App extends BaseApplication
 				$whoopsHandler->pushHandler(new \Whoops\Handler\PlainTextHandler());
 				$whoopsHandler->register();
 				
+				//throw new \RuntimeException("Commandline Oopsie!");
+				
 			}
 			
 		} else {
 		
 			//Web
+			/*$appServiceProvider = new \EaseAppPHP\Providers\AppServiceProvider($this->container);
+			$appServiceProvider->register();
+			
+			$routeServiceProvider = new \EaseAppPHP\Providers\RouteServiceProvider($this->container);
+			$routeServiceProvider->register();*/
+			
 			//Loop through and Register Service Providers First
 			foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+				//echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
+				//echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
+				
 				$registeredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
 				$registeredServiceProviders[$serviceProvidersArrayRowKey]->register();
-				
+				//echo $serviceProvidersArrayRowValue;
 				$this->serviceProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
 				
 				//Save available Serviceproviders to Container
 				$this->container->instance('EAServiceProviders', $this->serviceProviders);
 				$this->eaServiceProvidersList = $this->container->get('EAServiceProviders'); 
 			}
-			
+			//echo "easerviceproviders:";
+			// var_dump($this->eaServiceProvidersList);
+			//Loop through and Boot Service Providers Next
 			foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+				//echo "$serviceProvidersArrayRowKey: " . $serviceProvidersArrayRowKey . "\n";
+				//echo "$serviceProvidersArrayRowValue: " . $serviceProvidersArrayRowValue . "\n";
+				
+				//$regiseredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
 				$registeredServiceProviders[$serviceProvidersArrayRowKey]->boot();
 				
 				//https://stackoverflow.com/questions/829823/can-you-create-instance-properties-dynamically-in-php
@@ -146,6 +217,8 @@ Class App extends BaseApplication
 				$this->container->instance('EALoadedServiceProviders', $this->loadedProviders);
 				$this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
 			}
+			//echo "ealoadedserviceproviderslist:";
+			//var_dump($this->eaLoadedServiceProvidersList);
 			
 		}
 	}

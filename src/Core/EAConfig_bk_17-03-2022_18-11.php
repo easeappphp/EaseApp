@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace EaseAppPHP\Core;
 
-use \Illuminate\Container\Container;
-
 /**
  * EAConfig Class
  *
@@ -12,20 +10,12 @@ use \Illuminate\Container\Container;
  
 class EAConfig
 {
-	protected $container;
-	protected $serverRequest;
 	public $config = array();
 	public $singleFileNameExploded = array();
 	public $singleConfigItemArray = array();
 	public $singleConfigItemString = "";
 	public $singleConfigItemNull = null;
 	public $dotSeparatedKeyBasedConfigArray = array();
-	
-	public function __construct(Container $container)
-	{
-		$this->container = $container;
-		$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
-	}
 	
 	/**
 	 * Accepts Extracted Config Array
@@ -46,7 +36,7 @@ class EAConfig
 	 * @param string $filePath
 	 * @return array
 	 */
-	public function getFromSingleFile(string $filePath)
+	public function getFromSingleFile($filePath)
 	{
 		//$config = require __DIR__.'/main-config.php';
 		return require $filePath;
@@ -58,7 +48,7 @@ class EAConfig
 	 * @param string $folderPath
 	 * @return array
 	 */
-	public function getFromSingleFolder(string $folderPath)
+	public function getFromSingleFolder($folderPath)
 	{
 		foreach (glob($folderPath . "/*.php") as $singleFilePath) {
 			
@@ -81,7 +71,7 @@ class EAConfig
 	 * @param  array  $filepathsArray
 	 * @return array
 	 */
-	public function getFromFilepathsArray(array $filepathsArray)
+	public function getFromFilepathsArray($filepathsArray)
 	{
 		foreach ($filepathsArray as $singleFilePath) {
 			
@@ -105,7 +95,7 @@ class EAConfig
 	 * @param  string $prefix - an optional input parameter as prefix to all generated keys
 	 * @return array
 	 */
-	public function generateDotSeparatedKeyBasedConfigArray(array $multiDimensionalConfigArray, $prefix = '')
+	public function generateDotSeparatedKeyBasedConfigArray($multiDimensionalConfigArray, $prefix = '')
 	{
 		
 		foreach ($multiDimensionalConfigArray as $key => $value) {
@@ -133,7 +123,7 @@ class EAConfig
 	 * @param  string  $dotSeperatedConfigItem
 	 * @return mixed
 	 */
-	public function getDotSeparatedKeyValue(string $dotSeperatedConfigItem)
+	public function getDotSeparatedKeyValue($dotSeperatedConfigItem)
 	{
 		
 		if (isset($this->dotSeparatedKeyBasedConfigArray[$dotSeperatedConfigItem])) {
