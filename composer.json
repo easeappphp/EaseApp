@@ -65,7 +65,7 @@
     ],
 	"autoload": {
        
-	   "files": ["src/Helpers/get-environment-variables.php","src/Helpers/session-check-functions.php"],
+	   "files": ["src/Helpers/get-environment-variables.php","src/Helpers/session-check-functions.php","src/Helpers/date-functions.php"],
 	   "psr-4": {
             "EaseAppPHP\\": "src/"
         }
