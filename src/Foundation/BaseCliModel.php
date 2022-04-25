@@ -7,20 +7,21 @@ use \Illuminate\Container\Container;
 
 if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')) && (interface_exists('\Countable')) && (interface_exists('\EaseAppPHP\Foundation\Interfaces\ArrayableInterface'))) {
 	
-    class BaseWebModel implements \ArrayAccess, \JsonSerializable, \Countable, ArrayableInterface
+    class BaseCliModel implements \ArrayAccess, \JsonSerializable, \Countable, ArrayableInterface
     {
 		protected $container;
 		protected $config;
 		protected $matchedRouteDetails;
-		protected $queryParams;
+		//protected $queryParams;
 		protected $processedModelResponse;
 
-		public function __construct(Container $container, $config, $matchedRouteDetails, $queryParams)
+		//public function __construct(Container $container, $config, $matchedRouteDetails, $queryParams)
+		public function __construct(Container $container, $config, $matchedRouteDetails)
 		{
 			$this->container = $container;
 			$this->config = $config;
 			$this->matchedRouteDetails = $matchedRouteDetails;
-			$this->queryParams = $queryParams;
+			//$this->queryParams = $queryParams;
 			$this->processedModelResponse = new \stdClass();
 		}
 

@@ -48,6 +48,8 @@ Class App extends BaseApplication
 	protected $matchedRouteKey;
 	protected $matchedRouteDetails;
 	protected $eaConfig;
+	protected $argv;
+	protected $argc;
 	
 	/**
 	* All of the registered service providers.
@@ -83,10 +85,6 @@ Class App extends BaseApplication
     {	
 		$this->container = $container;
 		
-		$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
-		
-		$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
-		
 		$this->config = $this->container->get('config');   
 		
 		//Check if the request is based upon Console or Web
@@ -96,7 +94,39 @@ Class App extends BaseApplication
 		
 		//Save EA REQUEST Console Status Result to Container
 		$this->container->instance('EARequestConsoleStatusResult', $this->eaIsConsoleInstance);
-		$this->eaRequestConsoleStatusResult = $this->container->get('EARequestConsoleStatusResult');        
+		$this->eaRequestConsoleStatusResult = $this->container->get('EARequestConsoleStatusResult');   
+		
+		if ($this->container->get('EARequestConsoleStatusResult') == "Web") {
+			
+			//Web
+			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
+		
+			$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
+			
+		} 
+
+		if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
+			
+			//Console
+			$this->argc = trim(filter_var($GLOBALS['argc'], FILTER_SANITIZE_NUMBER_INT));
+			
+			$this->argv = $GLOBALS['argv'];
+			
+			for ($i=0; $i < $this->argc; $i++) {
+				
+				if (is_numeric($GLOBALS['argv'][$i])) {
+					
+					$this->argv[$i] = trim(filter_var($GLOBALS['argv'][$i], FILTER_SANITIZE_NUMBER_INT));
+					
+				} else {
+					
+					$this->argv[$i] = trim(filter_var($GLOBALS['argv'][$i], FILTER_SANITIZE_STRING));
+					
+				}
+				
+			}
+			
+		}
 		
     }
 	
@@ -111,7 +141,7 @@ Class App extends BaseApplication
 		if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
 			
 			//Console
-			if ($this->serverRequest->getServerParams()['APP_DEBUG'] == "true") {
+			if ($_ENV['APP_DEBUG'] == "true") {	
 				
 				$whoopsHandler = $this->container->get('\Whoops\Run');
 				$whoopsHandler->pushHandler(new \Whoops\Handler\PlainTextHandler());
@@ -119,7 +149,7 @@ Class App extends BaseApplication
 				
 			}
 			
-		} else {
+		} /*else {
 		
 			//Web
 			//Loop through and Register Service Providers First
@@ -147,6 +177,30 @@ Class App extends BaseApplication
 				$this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
 			}
 			
+		}*/
+		//Loop through and Register Service Providers First
+		foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+			$registeredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
+			$registeredServiceProviders[$serviceProvidersArrayRowKey]->register();
+			
+			$this->serviceProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
+			
+			//Save available Serviceproviders to Container
+			$this->container->instance('EAServiceProviders', $this->serviceProviders);
+			$this->eaServiceProvidersList = $this->container->get('EAServiceProviders'); 
+		}
+		
+		foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
+			$registeredServiceProviders[$serviceProvidersArrayRowKey]->boot();
+			
+			//https://stackoverflow.com/questions/829823/can-you-create-instance-properties-dynamically-in-php
+			//https://stackoverflow.com/questions/33486639/create-an-object-inside-for-loop
+
+			$this->loadedProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
+			
+			//Save available Serviceproviders to Container
+			$this->container->instance('EALoadedServiceProviders', $this->loadedProviders);
+			$this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
 		}
 	}
 	
@@ -162,6 +216,22 @@ Class App extends BaseApplication
         if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
 			
 			//Console
+			/* echo "echo on cli\n";
+			echo "timezone: " . $this->getConfig()["mainconfig"]["timezone"] . "\n";
+			
+			echo "There are $this->argc arguments\n";
+
+			for ($i=0; $i < $this->argc; $i++) {
+				echo $this->argv[$i] . "\n";
+			}
+			
+			if ($this->argc == "2") {
+				
+				if (($this->argv[0] == "console.php") && ($this->argv[1] == "/cron-job/sample")) {
+					echo "inside 1th argument\n";
+				}
+				
+			} */
 			
 		} else {
 		
