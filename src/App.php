@@ -126,6 +126,10 @@ Class App extends BaseApplication
 				
 			}
 			
+			$this->container->instance('argc', $this->argc);
+			
+			$this->container->instance('argv', $this->argv);
+			
 		}
 		
     }
@@ -216,12 +220,12 @@ Class App extends BaseApplication
         if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
 			
 			//Console
-			/* echo "echo on cli\n";
+			echo "echo on cli\n";
 			echo "timezone: " . $this->getConfig()["mainconfig"]["timezone"] . "\n";
 			
 			echo "There are $this->argc arguments\n";
 
-			for ($i=0; $i < $this->argc; $i++) {
+			/* for ($i=0; $i < $this->argc; $i++) {
 				echo $this->argv[$i] . "\n";
 			}
 			
@@ -229,6 +233,67 @@ Class App extends BaseApplication
 				
 				if (($this->argv[0] == "console.php") && ($this->argv[1] == "/cron-job/sample")) {
 					echo "inside 1th argument\n";
+				}
+				
+			} */
+			
+			$matchedRouteResponse = $this->container->get('matchedRouteResponse');
+			
+			$cliProcessExitCode = $this->container->get('matchedRouteResponse')["cli_process_exit_code"];
+			
+			$this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
+			echo "\n";
+			print_r($this->matchedRouteDetails);
+			
+			$requiredRouteType = "";
+			$requiredRouteType = $this->matchedRouteDetails["route_type"];
+			
+			echo "requiredRouteType: " . $requiredRouteType . "\n";
+			
+			$pageStatus = $this->matchedRouteDetails["status"];
+			$pageNumberOfRecords = $this->matchedRouteDetails["number_of_records"];
+			$pageNumberOfLoopsCount = $this->matchedRouteDetails["number_of_loops_count"];
+			$pageSleepTimeMinimumSeconds = $this->matchedRouteDetails["sleep_time_minimum_seconds"];
+			$pageSleepTimeMaximumSeconds = $this->matchedRouteDetails["sleep_time_maximum_seconds"];
+			$pageSleepIntervalDefinition = $this->matchedRouteDetails["sleep_interval_definition"];
+			$pageFilename = $this->matchedRouteDetails["page_filename"];
+			$pageRouteType = $this->matchedRouteDetails["route_type"];
+			$pageControllerType = $this->matchedRouteDetails["controller_type"];
+			$pageControllerClassName = $this->matchedRouteDetails["controller_class_name"];
+			$pageMethodName = $this->matchedRouteDetails["method_name"];
+			
+			
+			/* if ((isset($this->matchedRouteKey)) && ($this->matchedRouteKey != "header-response-only-404-not-found")) {
+				
+					
+				if ((isset($pageControllerType)) && (($pageControllerType == "procedural") || ($pageControllerType == "oop-mapped"))) {
+					
+					if (class_exists($pageControllerClassName)) {
+						
+						$matchedController = new $pageControllerClassName($this->container);
+					
+						$this->container->instance('MatchedControllerName', $matchedController);
+						$this->matchedController = $this->container->get('MatchedControllerName');
+						
+						if ($this->matchedController->checkIfActionExists($pageMethodName)) {
+							
+							$this->response = $this->matchedController->$pageMethodName();
+							//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
+							//$this->matchedController->callAction($pageMethodName, array("three", "four"));
+							//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
+							
+						} else {
+						
+							throw new Exception($pageMethodName . " action does not exist!");
+							
+						}
+						
+					} else {
+						
+						throw new Exception($pageControllerClassName . " controller does not exist!");
+						
+					}
+					
 				}
 				
 			} */
