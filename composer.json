@@ -27,7 +27,7 @@
         "ezyang/htmlpurifier": "^4.14",
         "easeappphp/hmac": "^1.0.2",
         "easeappphp/json-decode": "^1.0",
-		"easeappphp/ea-cli-router": "^0.0.1"
+		"easeappphp/ea-cli-router": "*"
     },
 	"require-dev": {
         "ext-json": "*",
@@ -53,7 +53,7 @@
         "ezyang/htmlpurifier": "^4.14",
         "easeappphp/hmac": "^1.0.2",
         "easeappphp/json-decode": "^1.0",
-		"easeappphp/ea-cli-router": "^0.0.1"
+		"easeappphp/ea-cli-router": "*"
     },
 	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
