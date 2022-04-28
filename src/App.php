@@ -72,16 +72,10 @@ Class App extends BaseApplication
 	 * Accepts .env file path and loads the values into $ENV Superglobals. Also, Creates a Container.
      * Extract Config Values into an array, Create ServerRequest.
 	 *
-	 * @param string $envFilePath
-     * @param object $container
-     * @param string $configSource
-     * @param array $configSourceValueDataType
-     * @param array $configSourceValueData
-	 * @return object
+	 * @param object $container
+     * @return object
 	 */
-	//public function __construct($envFilePath, $container, $configSource, $configSourceValueDataType, $configSourceValueData)
 	public function __construct(Container $container)
-    //public function __construct(Container $container)
     {	
 		$this->container = $container;
 		
@@ -137,7 +131,6 @@ Class App extends BaseApplication
 	/**
 	 * Register Service Providers with the container.
 	 *
-	 * @param array $serviceProvidersArray
 	 * @return object
 	 */
 	public function init()
@@ -153,35 +146,8 @@ Class App extends BaseApplication
 				
 			}
 			
-		} /*else {
+		}
 		
-			//Web
-			//Loop through and Register Service Providers First
-			foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
-				$registeredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
-				$registeredServiceProviders[$serviceProvidersArrayRowKey]->register();
-				
-				$this->serviceProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
-				
-				//Save available Serviceproviders to Container
-				$this->container->instance('EAServiceProviders', $this->serviceProviders);
-				$this->eaServiceProvidersList = $this->container->get('EAServiceProviders'); 
-			}
-			
-			foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
-				$registeredServiceProviders[$serviceProvidersArrayRowKey]->boot();
-				
-				//https://stackoverflow.com/questions/829823/can-you-create-instance-properties-dynamically-in-php
-				//https://stackoverflow.com/questions/33486639/create-an-object-inside-for-loop
-
-				$this->loadedProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
-				
-				//Save available Serviceproviders to Container
-				$this->container->instance('EALoadedServiceProviders', $this->loadedProviders);
-				$this->eaLoadedServiceProvidersList = $this->container->get('EALoadedServiceProviders'); 
-			}
-			
-		}*/
 		//Loop through and Register Service Providers First
 		foreach ($this->getConfig()["mainconfig"]["providers"] as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
 			$registeredServiceProviders[$serviceProvidersArrayRowKey] = new $serviceProvidersArrayRowValue($this->container);
@@ -197,9 +163,6 @@ Class App extends BaseApplication
 		foreach ($this->eaServiceProvidersList as $serviceProvidersArrayRowKey => $serviceProvidersArrayRowValue) {
 			$registeredServiceProviders[$serviceProvidersArrayRowKey]->boot();
 			
-			//https://stackoverflow.com/questions/829823/can-you-create-instance-properties-dynamically-in-php
-			//https://stackoverflow.com/questions/33486639/create-an-object-inside-for-loop
-
 			$this->loadedProviders[] = $serviceProvidersArrayRowValue; // NOT WORKING STILL
 			
 			//Save available Serviceproviders to Container
@@ -211,10 +174,8 @@ Class App extends BaseApplication
 	/**
 	 * Run Application
 	 *
-	 * @param array $middlewareQueueArray
 	 * @return object
 	 */
-	//public function run($middlewareQueueArray = array())
 	public function run()
 	{
         if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
