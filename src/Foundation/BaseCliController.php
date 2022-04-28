@@ -9,22 +9,25 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseCliControllerInterfa
 	
     class BaseCliController implements \EaseAppPHP\Foundation\Interfaces\BaseCliControllerInterface
     {
+		// see https://tldp.org/LDP/abs/html/exitcodes.html
+		public const SUCCESS = 0;
+		public const FAILURE = 1;
+		public const INVALID = 2;
+		
 		protected $container;
 		protected $config;
 		protected $matchedRouteDetails;
-		//protected $serverRequest;
-		//protected $queryParams;
-		//protected $response;
-		//protected const RESPONSEHEADER = 'X-Response-Time';
-
+		protected $argc;
+		protected $argv;
+		
         public function __construct(Container $container)
 		{
 			$this->container = $container;
 			$this->config = $this->container->get('config');
 			$this->matchedRouteDetails = $this->container->get('MatchedRouteDetails');
-			//$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
-			//$this->queryParams = $this->serverRequest->getQueryParams();
-			//$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
+			$this->argc = $this->container->get('argc');
+			$this->argv = $this->container->get('argv');
+			
 		}
 		
 		/**
@@ -92,12 +95,12 @@ if (interface_exists('\EaseAppPHP\Foundation\Interfaces\BaseCliControllerInterfa
 		 * Note: View directory names should not contain the . character.
 		 * @return string
 		 */
-		/* public function createViewFileNameWithPath($pageFileName)
+		public function createViewFileNameWithPath($pageFileName)
 		{
 			$fileNameParts = preg_replace('/\./', '/', $pageFileName, (substr_count($pageFileName, '.') - 1));
 			
 			return $fileNameParts;			
-		} */
+		} 
     }
 	
 }

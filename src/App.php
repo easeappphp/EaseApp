@@ -220,35 +220,15 @@ Class App extends BaseApplication
         if ($this->container->get('EARequestConsoleStatusResult') == "Console") {
 			
 			//Console
-			echo "echo on cli\n";
-			echo "timezone: " . $this->getConfig()["mainconfig"]["timezone"] . "\n";
-			
-			echo "There are $this->argc arguments\n";
-
-			/* for ($i=0; $i < $this->argc; $i++) {
-				echo $this->argv[$i] . "\n";
-			}
-			
-			if ($this->argc == "2") {
-				
-				if (($this->argv[0] == "console.php") && ($this->argv[1] == "/cron-job/sample")) {
-					echo "inside 1th argument\n";
-				}
-				
-			} */
 			
 			$matchedRouteResponse = $this->container->get('matchedRouteResponse');
 			
-			$cliProcessExitCode = $this->container->get('matchedRouteResponse')["cli_process_exit_code"];
+			$this->matchedRouteKey = $this->container->get('MatchedRouteKey'); 
 			
 			$this->matchedRouteDetails = $this->container->get('MatchedRouteDetails'); 
-			echo "\n";
-			print_r($this->matchedRouteDetails);
 			
 			$requiredRouteType = "";
 			$requiredRouteType = $this->matchedRouteDetails["route_type"];
-			
-			echo "requiredRouteType: " . $requiredRouteType . "\n";
 			
 			$pageStatus = $this->matchedRouteDetails["status"];
 			$pageNumberOfRecords = $this->matchedRouteDetails["number_of_records"];
@@ -263,40 +243,78 @@ Class App extends BaseApplication
 			$pageMethodName = $this->matchedRouteDetails["method_name"];
 			
 			
-			/* if ((isset($this->matchedRouteKey)) && ($this->matchedRouteKey != "header-response-only-404-not-found")) {
+			if ((isset($this->matchedRouteKey)) && ($this->matchedRouteKey != "not-found")) {
 				
+				if ($pageStatus == "ON") {
 					
-				if ((isset($pageControllerType)) && (($pageControllerType == "procedural") || ($pageControllerType == "oop-mapped"))) {
-					
-					if (class_exists($pageControllerClassName)) {
+					if (($pageRouteType == "cron-job") || ($pageRouteType == "message-queue-worker")) {
 						
-						$matchedController = new $pageControllerClassName($this->container);
+						if ((isset($pageControllerType)) && (($pageControllerType == "procedural") || ($pageControllerType == "oop-mapped"))) {
 					
-						$this->container->instance('MatchedControllerName', $matchedController);
-						$this->matchedController = $this->container->get('MatchedControllerName');
-						
-						if ($this->matchedController->checkIfActionExists($pageMethodName)) {
+							if (class_exists($pageControllerClassName)) {
+								
+								$matchedController = new $pageControllerClassName($this->container);
 							
-							$this->response = $this->matchedController->$pageMethodName();
-							//$this->matchedController->callAction($pageMethodName, $this->serverRequest->getQueryParams());
-							//$this->matchedController->callAction($pageMethodName, array("three", "four"));
-							//$this->matchedController->$pageMethodName($this->serverRequest->getQueryParams());
-							
-						} else {
-						
-							throw new Exception($pageMethodName . " action does not exist!");
+								$this->container->instance('MatchedControllerName', $matchedController);
+								$this->matchedController = $this->container->get('MatchedControllerName');
+								
+								if ($this->matchedController->checkIfActionExists($pageMethodName)) {
+																		
+									$this->response = $this->matchedController->$pageMethodName();
+									
+									if ((isset($this->response)) && ($this->response == 0)) {
+										//Success
+										return $this->response;
+										
+									} elseif ((isset($this->response)) && ($this->response == 1)) {
+										//FAILURE
+										//Log Failure scenario content
+										return $this->response;
+										
+									} else {
+										//INVALID (>=2)
+										//Log Invalid scenario reasons
+										return $this->response;
+										
+									}
+									
+									
+								} else {
+								
+									//throw new \Exception($pageMethodName . " action does not exist!");
+									echo html_escaped_output($pageMethodName) . " action does not exist!";
+								}
+								
+							} else {
+								
+								//throw new \Exception($pageControllerClassName . " controller does not exist!");
+								echo html_escaped_output($pageControllerClassName) . " controller does not exist!";
+							}
 							
 						}
 						
 					} else {
 						
-						throw new Exception($pageControllerClassName . " controller does not exist!");
+						echo "Cron jobs & Message queue workers are supported at this moment.\n";
 						
 					}
 					
+					
+				} else {
+					
+					//throw new \Exception("Status of cli route is not ON. This trigger will be left to subside!\n");
+					echo "Status of cli route is not ON. This trigger will be left to subside!\n";
 				}
 				
-			} */
+					
+				
+				
+			} else {
+				
+				//throw new \Exception("cli route does not exist!\n");
+				echo "cli route does not exist!\n";
+				
+			}
 			
 		} else {
 		
