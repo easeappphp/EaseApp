@@ -99,6 +99,36 @@ class EAConfig
 	}
 	
 	/**
+	 * Get the Config Array Data
+	 *
+	 * @param  array  $filepathsArray
+	 * @return array
+	 */
+	public function get(string $configSource, string $configSourceValueDataType, string $configSourceValueData)
+	{
+		
+		if (($configSource == 'As-Array') && ($configSourceValueDataType == 'array') && (is_array($configSourceValueData))) {
+
+			$collectedConfigData = $this->getAsArray($configSourceValueData);
+
+		} elseif (($configSource == 'From-Single-File') && ($configSourceValueDataType == 'string') && (is_string($configSourceValueData))) {
+
+			$collectedConfigData = $this->getFromSingleFile($configSourceValueData);
+
+		} elseif (($configSource == 'From-Single-Folder') && ($configSourceValueDataType == 'string') && (is_string($configSourceValueData))) {
+
+			$collectedConfigData = $this->getFromSingleFolder($configSourceValueData);
+
+		} elseif (($configSource == 'From-Filepaths-Array') && ($configSourceValueDataType == 'array') && (is_array($configSourceValueData))) {
+
+			$collectedConfigData = $this->getFromFilepathsArray($configSourceValueData);
+
+		} 
+		
+		return $collectedConfigData;
+	}
+	
+	/**
 	 * Generate dot seperated keys based config array, from the multi-dimensional config array.
 	 *
 	 * @param  array  $multiDimensionalConfigArray
