@@ -28,7 +28,8 @@
         "easeappphp/hmac": "^1.0.2",
         "easeappphp/json-decode": "^1.0",
 		"easeappphp/ea-cli-router": "*",
-		"matthiasmullie/scrapbook": "^1.4"
+		"matthiasmullie/scrapbook": "^1.4",
+		"league/flysystem": "^2.4"
     },
 	"require-dev": {
         "ext-json": "*",
@@ -55,7 +56,8 @@
         "easeappphp/hmac": "^1.0.2",
         "easeappphp/json-decode": "^1.0",
 		"easeappphp/ea-cli-router": "*",
-		"matthiasmullie/scrapbook": "^1.4"
+		"matthiasmullie/scrapbook": "^1.4",
+		"league/flysystem": "^2.4"
     },
 	"homepage": "https://github.com/easeappphp/EaseApp",
     "license": "MIT",
