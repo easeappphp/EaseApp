@@ -30,6 +30,7 @@ Class App extends BaseApplication
     protected $collectedConfigData = [];
 	protected $config = [];        
 	protected $eaTimerInstance;
+	protected $serverRequestInstance;
 	protected $serverRequest;
 	protected $initResult;
 	protected $eaRouterinstance;
@@ -81,6 +82,18 @@ Class App extends BaseApplication
 		
 		$this->config = $this->container->get('config');   
 		
+		/*
+		*--------------------------------------------------------------------------
+		* Define Default timezone
+		*--------------------------------------------------------------------------
+		*
+		*/
+		if (function_exists("date_default_timezone_set")) {
+				
+			date_default_timezone_set($_ENV['TIMEZONE']);
+
+		}
+		
 		//Check if the request is based upon Console or Web
 		$eaIsConsole = new EAIsConsole();
 		$this->container->instance('EAIsConsole', $eaIsConsole);
@@ -93,6 +106,8 @@ Class App extends BaseApplication
 		if ($this->container->get('EARequestConsoleStatusResult') == "Web") {
 			
 			//Web
+			$serverRequestInstance = \Laminas\Diactoros\ServerRequestFactory::fromGlobals();
+			$container->instance('\Laminas\Diactoros\ServerRequestFactory', $serverRequestInstance);
 			$this->serverRequest = $this->container->get('\Laminas\Diactoros\ServerRequestFactory');
 		
 			$this->response = $this->container->get('\EaseAppPHP\Foundation\BaseWebResponse');
@@ -114,7 +129,8 @@ Class App extends BaseApplication
 					
 				} else {
 					
-					$this->argv[$i] = trim(filter_var($GLOBALS['argv'][$i], FILTER_SANITIZE_STRING));
+					//$this->argv[$i] = trim(filter_var($GLOBALS['argv'][$i], FILTER_SANITIZE_STRING));
+					$this->argv[$i] = trim(escapeshellarg($GLOBALS['argv'][$i]));
 					
 				}
 				
