@@ -24,17 +24,17 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 			$this->processedModelResponse = new \stdClass();
 		}
 
-        public function offsetExists ($offset)
+        public function offsetExists ($offset): bool
 		{
 			return isset($this->container[$offset]);
 		}
 
-		public function offsetGet ($offset)
+		public function offsetGet ($offset): mixed
 		{
 			return isset($this->container[$offset]) ? $this->container[$offset] : null;
 		}
 
-		public function offsetSet ($offset, $value)
+		public function offsetSet ($offset, $value): void
 		{
 			if (is_null($offset)) {
 				
@@ -47,7 +47,7 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 			}
 		}
 
-		public function offsetUnset ($offset)
+		public function offsetUnset ($offset): void
 		{
 			unset($this->container[$offset]);
 		}
@@ -57,7 +57,8 @@ if ((interface_exists('\ArrayAccess')) && (interface_exists('\JsonSerializable')
 		 *
 		 * @return array
 		 */
-		public function jsonSerialize(){
+		public function jsonSerialize(): mixed
+		{
 			return [];
 		}
 		
